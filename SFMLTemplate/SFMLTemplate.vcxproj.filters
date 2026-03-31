@@ -6,9 +6,4 @@
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="GameMain.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-  </ItemGroup>
 </Project>
