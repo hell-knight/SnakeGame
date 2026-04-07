@@ -1,12 +1,14 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.3.11505.172 d18.3
+VisualStudioVersion = 18.3.11505.172
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SFMLTemplate", "SFMLTemplate\SFMLTemplate.vcxproj", "{AE2B0BAC-971E-4D90-8222-6E7554C835EE}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SFML", "SFML\SFML.vcxproj", "{0D9DFFE7-5BF2-448D-8639-0FE0BBB8230A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SnakeGame", "SnakeGame\SnakeGame.vcxproj", "{982A0935-7F74-4DCB-949C-0151DC8D547D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ArkanoidGame", "ArkanoidGame\ArkanoidGame.vcxproj", "{7D7B33D9-A157-4C5E-AB65-B486933EC90F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +42,14 @@ Global
 		{982A0935-7F74-4DCB-949C-0151DC8D547D}.Release|x64.Build.0 = Release|x64
 		{982A0935-7F74-4DCB-949C-0151DC8D547D}.Release|x86.ActiveCfg = Release|Win32
 		{982A0935-7F74-4DCB-949C-0151DC8D547D}.Release|x86.Build.0 = Release|Win32
+		{7D7B33D9-A157-4C5E-AB65-B486933EC90F}.Debug|x64.ActiveCfg = Debug|x64
+		{7D7B33D9-A157-4C5E-AB65-B486933EC90F}.Debug|x64.Build.0 = Debug|x64
+		{7D7B33D9-A157-4C5E-AB65-B486933EC90F}.Debug|x86.ActiveCfg = Debug|Win32
+		{7D7B33D9-A157-4C5E-AB65-B486933EC90F}.Debug|x86.Build.0 = Debug|Win32
+		{7D7B33D9-A157-4C5E-AB65-B486933EC90F}.Release|x64.ActiveCfg = Release|x64
+		{7D7B33D9-A157-4C5E-AB65-B486933EC90F}.Release|x64.Build.0 = Release|x64
+		{7D7B33D9-A157-4C5E-AB65-B486933EC90F}.Release|x86.ActiveCfg = Release|Win32
+		{7D7B33D9-A157-4C5E-AB65-B486933EC90F}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
