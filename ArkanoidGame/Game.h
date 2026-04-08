@@ -54,7 +54,7 @@ namespace ArkanoidGame
 		void SwitchStateTo(GameStateType newState);
 
 	private:
-		std::vector<GameState> gameStateStack;
+		std::vector<GameState> stateStack;
 		GameStateChangeType gameStateChangeType = GameStateChangeType::None;
 		GameStateType pendingGameStateType = GameStateType::None;
 		bool pendingGameStateIsExclusivelyVisible = false;

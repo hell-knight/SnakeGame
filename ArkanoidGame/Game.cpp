@@ -44,9 +44,9 @@ namespace ArkanoidGame
 				window.close();
 			}
 
-			if (gameStateStack.size() > 0)
+			if (stateStack.size() > 0)
 			{
-				gameStateStack.back().HandleWindowEvent(event);
+				stateStack.back().HandleWindowEvent(event);
 			}
 		}
 	}
@@ -56,34 +56,33 @@ namespace ArkanoidGame
 		if (gameStateChangeType == GameStateChangeType::Switch)
 		{
 			// Shutdown all game states
-			while (gameStateStack.size() > 0)
+			while (stateStack.size() > 0)
 			{
-				gameStateStack.pop_back();
+				stateStack.pop_back();
 			}
 		}
 		else if (gameStateChangeType == GameStateChangeType::Pop)
 		{
 			// Shutdown only current game state
-			if (gameStateStack.size() > 0)
+			if (stateStack.size() > 0)
 			{
-				gameStateStack.pop_back();
+				stateStack.pop_back();
 			}
 		}
 
 		// Initialize new game state if needed
 		if (pendingGameStateType != GameStateType::None)
 		{
-			gameStateStack.emplace_back(pendingGameStateType);
-			gameStateStack.back().SetExclusivelyVisible(pendingGameStateIsExclusivelyVisible);
+			stateStack.push_back(GameState(pendingGameStateType, pendingGameStateIsExclusivelyVisible));
 		}
 
 		gameStateChangeType = GameStateChangeType::None;
 		pendingGameStateType = GameStateType::None;
 		pendingGameStateIsExclusivelyVisible = false;
 
-		if (gameStateStack.size() > 0)
+		if (stateStack.size() > 0)
 		{
-			gameStateStack.back().Update(timeDelta);
+			stateStack.back().Update(timeDelta);
 			return true;
 		}
 
@@ -92,10 +91,10 @@ namespace ArkanoidGame
 
 	void Game::Draw(sf::RenderWindow& window)
 	{
-		if (gameStateStack.size() > 0)
+		if (stateStack.size() > 0)
 		{
 			std::vector<GameState*> visibleGameStates;
-			for (auto it = gameStateStack.rbegin(); it != gameStateStack.rend(); ++it)
+			for (auto it = stateStack.rbegin(); it != stateStack.rend(); ++it)
 			{
 				visibleGameStates.push_back(&(*it));
 				if (it->IsExclusivelyVisible())
@@ -114,9 +113,9 @@ namespace ArkanoidGame
 	void Game::Shutdown()
 	{
 		// Shutdown all game states
-		while (gameStateStack.size() > 0)
+		while (stateStack.size() > 0)
 		{
-			gameStateStack.pop_back();
+			stateStack.pop_back();
 		}
 
 		gameStateChangeType = GameStateChangeType::None;

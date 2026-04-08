@@ -8,76 +8,40 @@
 
 namespace ArkanoidGame
 {
-	GameState::GameState(GameStateType t) 
-		: type(t)
-	{
-		InitData();
-	}
-
-	GameState::GameState(GameState&& other) noexcept
-		: type(other.type)
-		, data(other.data)
-		, isExclusivelyVisible(other.isExclusivelyVisible)
-	{
-		other.type = GameStateType::None;
-		other.data = nullptr;
-		other.isExclusivelyVisible = false;
-	}
-
-	GameState::~GameState()
-	{
-		ShutdownData();
-	}
-
-	GameState& GameState::operator=(GameState&& other) noexcept
-	{
-		if (this != &other)
-		{
-			ShutdownData();
-
-			type = other.type;
-			data = other.data;
-			isExclusivelyVisible = other.isExclusivelyVisible;
-
-			other.type = GameStateType::None;
-			other.data = nullptr;
-			other.isExclusivelyVisible = false;
-		}
-		return *this;
-	}
-
-	void GameState::InitData()
+	GameState::GameState(GameStateType type, bool isExclusivelyVisible)
+		: type(type)
+		, isExclusivelyVisible(isExclusivelyVisible)
 	{
 		switch (type)
 		{
 		case GameStateType::MainMenu:
 		{
 			data = new GameStateMainMenuData();
-			InitGameStateMainMenu(*(GameStateMainMenuData*)data);
+			((GameStateMainMenuData*)data)->Init();
 			break;
 		}
 		case GameStateType::Playing:
 		{
 			data = new GameStatePlayingData();
-			InitGameStatePlaying(*(GameStatePlayingData*)data);
+			((GameStatePlayingData*)data)->Init();
 			break;
 		}
 		case GameStateType::GameOver:
 		{
 			data = new GameStateGameOverData();
-			InitGameStateGameOver(*(GameStateGameOverData*)data);
+			((GameStateGameOverData*)data)->Init();
 			break;
 		}
 		case GameStateType::ExitDialog:
 		{
 			data = new GameStatePauseMenuData();
-			InitGameStatePauseMenu(*(GameStatePauseMenuData*)data);
+			((GameStatePauseMenuData*)data)->Init();
 			break;
 		}
 		case GameStateType::Records:
 		{
 			data = new GameStateRecordsData();
-			InitGameStateRecords(*(GameStateRecordsData*)data);
+			((GameStateRecordsData*)data)->Init();
 			break;
 		}
 		default:
@@ -86,42 +50,43 @@ namespace ArkanoidGame
 		}
 	}
 
-	void GameState::ShutdownData()
+	GameState::GameState(GameState&& state)
 	{
-		if (data == nullptr)
-		{
-			return;
-		}
+		operator=(std::move(state));
+	}
 
+
+	GameState::~GameState()
+	{
 		switch (type)
 		{
 		case GameStateType::MainMenu:
 		{
-			ShutdownGameStateMainMenu(*(GameStateMainMenuData*)data);
+			((GameStateMainMenuData*)data)->Shutdown();
 			delete (GameStateMainMenuData*)data;
 			break;
 		}
 		case GameStateType::Playing:
 		{
-			ShutdownGameStatePlaying(*(GameStatePlayingData*)data);
+			((GameStatePlayingData*)data)->Shutdown();
 			delete (GameStatePlayingData*)data;
 			break;
 		}
 		case GameStateType::GameOver:
 		{
-			ShutdownGameStateGameOver(*(GameStateGameOverData*)data);
+			((GameStateGameOverData*)data)->Shutdown();
 			delete (GameStateGameOverData*)data;
 			break;
 		}
 		case GameStateType::ExitDialog:
 		{
-			ShutdownGameStatePauseMenu(*(GameStatePauseMenuData*)data);
+			((GameStatePauseMenuData*)data)->Shutdown();
 			delete (GameStatePauseMenuData*)data;
 			break;
 		}
 		case GameStateType::Records:
 		{
-			ShutdownGameStateRecords(*(GameStateRecordsData*)data);
+			((GameStateRecordsData*)data)->Shutdown();
 			delete (GameStateRecordsData*)data;
 			break;
 		}
@@ -132,34 +97,34 @@ namespace ArkanoidGame
 
 		data = nullptr;
 	}
-
+	
 	void GameState::HandleWindowEvent(sf::Event& event)
 	{
 		switch (type)
 		{
 		case GameStateType::MainMenu:
 		{
-			HandleGameStateMainMenuWindowEvent(*(GameStateMainMenuData*)data, event);
+			((GameStateMainMenuData*)data)->HandleWindowEvent(event);
 			break;
 		}
 		case GameStateType::Playing:
 		{
-			HandleGameStatePlayingWindowEvent(*(GameStatePlayingData*)data, event);
+			((GameStatePlayingData*)data)->HandleWindowEvent(event);
 			break;
 		}
 		case GameStateType::GameOver:
 		{
-			HandleGameStateGameOverWindowEvent(*(GameStateGameOverData*)data, event);
+			((GameStateGameOverData*)data)->HandleWindowEvent(event);
 			break;
 		}
 		case GameStateType::ExitDialog:
 		{
-			HandleGameStatePauseMenuWindowEvent(*(GameStatePauseMenuData*)data, event);
+			((GameStatePauseMenuData*)data)->HandleWindowEvent(event);
 			break;
 		}
 		case GameStateType::Records:
 		{
-			HandleGameStateRecordsWindowEvent(*(GameStateRecordsData*)data, event);
+			((GameStateRecordsData*)data)->HandleWindowEvent(event);
 			break;
 		}
 		default:
@@ -174,27 +139,27 @@ namespace ArkanoidGame
 		{
 		case GameStateType::MainMenu:
 		{
-			UpdateGameStateMainMenu(*(GameStateMainMenuData*)data, timeDelta);
+			((GameStateMainMenuData*)data)->Update(timeDelta);
 			break;
 		}
 		case GameStateType::Playing:
 		{
-			UpdateGameStatePlaying(*(GameStatePlayingData*)data, timeDelta);
+			((GameStatePlayingData*)data)->Update(timeDelta);
 			break;
 		}
 		case GameStateType::GameOver:
 		{
-			UpdateGameStateGameOver(*(GameStateGameOverData*)data, timeDelta);
+			((GameStateGameOverData*)data)->Update(timeDelta);
 			break;
 		}
 		case GameStateType::ExitDialog:
 		{
-			UpdateGameStatePauseMenu(*(GameStatePauseMenuData*)data, timeDelta);
+			((GameStatePauseMenuData*)data)->Update(timeDelta);
 			break;
 		}
 		case GameStateType::Records:
 		{
-			UpdateGameStateRecords(*(GameStateRecordsData*)data, timeDelta);
+			((GameStateRecordsData*)data)->Update(timeDelta);
 			break;
 		}
 		default:
@@ -209,32 +174,75 @@ namespace ArkanoidGame
 		{
 		case GameStateType::MainMenu:
 		{
-			DrawGameStateMainMenu(*(GameStateMainMenuData*)data, window);
+			((GameStateMainMenuData*)data)->Draw(window);
 			break;
 		}
 		case GameStateType::Playing:
 		{
-			DrawGameStatePlaying(*(GameStatePlayingData*)data, window);
+			((GameStatePlayingData*)data)->Draw(window);
 			break;
 		}
 		case GameStateType::GameOver:
 		{
-			DrawGameStateGameOver(*(GameStateGameOverData*)data, window);
+			((GameStateGameOverData*)data)->Draw(window);
 			break;
 		}
 		case GameStateType::ExitDialog:
 		{
-			DrawGameStatePauseMenu(*(GameStatePauseMenuData*)data, window);
+			((GameStatePauseMenuData*)data)->Draw(window);
 			break;
 		}
 		case GameStateType::Records:
 		{
-			DrawGameStateRecords(*(GameStateRecordsData*)data, window);
+			((GameStateRecordsData*)data)->Draw(window);
 			break;
 		}
 		default:
 			assert(false); // We want to know if we forgot to implement new game state
 			break;
 		}
+	}
+
+	void* GameState::CopyData(const GameState& state) const
+	{
+		void* data = nullptr;
+		switch (type)
+		{
+		case GameStateType::MainMenu:
+		{
+			data = new GameStateMainMenuData();
+			((GameStateMainMenuData*)data)->Init();
+			break;
+		}
+		case GameStateType::Playing:
+		{
+			data = new GameStatePlayingData();
+			((GameStatePlayingData*)data)->Init();
+			break;
+		}
+		case GameStateType::GameOver:
+		{
+			data = new GameStateGameOverData();
+			((GameStateGameOverData*)data)->Init();
+			break;
+		}
+		case GameStateType::ExitDialog:
+		{
+			data = new GameStatePauseMenuData();
+			((GameStatePauseMenuData*)data)->Init();
+			break;
+		}
+		case GameStateType::Records:
+		{
+			data = new GameStateRecordsData();
+			((GameStateRecordsData*)data)->Init();
+			break;
+		}
+		default:
+			assert(false); // We want to know if we forgot to implement new game state
+			break;
+		}
+
+		return data;
 	}
 }

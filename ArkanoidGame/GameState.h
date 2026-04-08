@@ -16,28 +16,41 @@ namespace ArkanoidGame
 	class GameState
 	{
 	public:
-		explicit GameState(GameStateType t = GameStateType::None);
-		GameState(const GameState&) = delete;
-		GameState(GameState&& other) noexcept;
+		GameState() = default;
+		GameState(GameStateType type, bool isExclusivelyVisible);
+		GameState(const GameState& state) = delete;
+		GameState(GameState&& state);
+
 		~GameState();
 
-		GameState& operator=(const GameState&) = delete;
-		GameState& operator=(GameState&& other) noexcept;
+		GameState& operator=(const GameState& state) = delete;
+		GameState& operator=(GameState&& state) noexcept {
+			type = state.type;
+			data = state.data;
+			isExclusivelyVisible = state.isExclusivelyVisible;
+			state.data = nullptr;
+			return *this;
+		}
 
 		GameStateType GetType() const { return type; }
-		void* GetData() { return data; }
-		const void* GetData() const { return data; }
+		//void* GetData() { return data; }
+		//const void* GetData() const { return data; }
 		bool IsExclusivelyVisible() const { return isExclusivelyVisible; }
 
-		void SetExclusivelyVisible(bool value) { isExclusivelyVisible = value; }
+		//void SetExclusivelyVisible(bool value) { isExclusivelyVisible = value; }
+
+		template<class T>
+		T* GetData() const
+		{
+			return static_cast<T>(data);
+		}
 
 		void HandleWindowEvent(sf::Event& event);
 		void Update(float timeDelta);
 		void Draw(sf::RenderWindow& window);
 
 	private:
-		void InitData();
-		void ShutdownData();
+		void* CopyData(const GameState& state) const;
 
 		GameStateType type = GameStateType::None;
 		void* data = nullptr;

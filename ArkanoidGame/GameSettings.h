@@ -9,24 +9,19 @@ namespace ArkanoidGame
 	const std::string FONTS_PATH = RESOURCES_PATH + "Fonts/";
 	const std::string SOUNDS_PATH = RESOURCES_PATH + "Sounds/";
 
-	// Game settings constants
-	const float PLATFORM_SPEED = 500.f;
-	const float PLATFORM_WIDTH = 80.f;
-	const float PLATFORM_HEIGHT = 30.f;
-	const float BALL_SIZE = 20.f;
-	const float SNAKE_SIZE = 20.f;
-	const unsigned int INITIAL_SNAKE_SIZE = 3;
-	const unsigned int APPLE_SIZE = 20;
-	const unsigned int ROCK_SIZE = 15;
-	const float INITIAL_SPEED = 200.f;	// 
-	const float ACCELERATION = 10.f;	// For each eaten apple snake speed will be increased by this value
-	const int MIN_APPLES = 40;
 	const int MAX_APPLES = 80;
+
+	// Game settings constants
+	const float PLATFORM_SPEED = 300.f;
+	const unsigned int PLATFORM_WIDTH = 60;
+	const unsigned int PLATFORM_HEIGHT = 20;
+	const unsigned int BALL_SIZE = 20;
+	const unsigned int BALL_SPEED = 400;
+	const float ACCELERATION = 10.f;
 	const unsigned int SCREEN_WIDTH = 800;
-	const unsigned int SCREEN_HEGHT = 600;
+	const unsigned int SCREEN_HEIGHT = 600;
 	const float TIME_PER_FRAME = 1.f / 60.f; // 60 fps
-	const unsigned int ROCKS_COUNT = 20;
-	const std::string GAME_NAME = "SnakeGame";
+	const std::string GAME_NAME = "ArkanoidGame";
 
 	const int MAX_RECORDS_TABLE_SIZE = 5;
 	extern const char* PLAYER_NAME; // We need to define this constant in some SPP

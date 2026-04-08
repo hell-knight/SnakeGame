@@ -8,8 +8,16 @@ namespace ArkanoidGame
 {
 	class Game;
 
-	struct GameStatePlayingData
+	class GameStatePlayingData
 	{
+	public:
+		void Init();
+		void Shutdown();
+		void HandleWindowEvent(const sf::Event& event);
+		void Update(float timeDelta);
+		void Draw(sf::RenderWindow& window);
+
+	private:
 		// Resources
 		sf::Font font;
 		sf::SoundBuffer eatAppleSoundBuffer;
@@ -20,7 +28,7 @@ namespace ArkanoidGame
 		Ball ball;
 
 		// UI data
-		//sf::Text scoreText;
+		sf::Text scoreText;
 		sf::Text inputHintText;
 		sf::RectangleShape background;
 
@@ -28,10 +36,4 @@ namespace ArkanoidGame
 		sf::Sound eatAppleSound;
 		sf::Sound gameOverSound;
 	};
-
-	void InitGameStatePlaying(GameStatePlayingData& data);
-	void ShutdownGameStatePlaying(GameStatePlayingData& data);
-	void HandleGameStatePlayingWindowEvent(GameStatePlayingData& data, const sf::Event& event);
-	void UpdateGameStatePlaying(GameStatePlayingData& data, float timeDelta);
-	void DrawGameStatePlaying(GameStatePlayingData& data, sf::RenderWindow& window);
 }

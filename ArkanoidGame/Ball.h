@@ -9,17 +9,16 @@ namespace ArkanoidGame
 	{
 	public:
 		void Init();
-		void Update(float timeDelta, const Platform& platform);
-		void Draw(sf::RenderWindow& window) const;
+		void Update(float timeDelta);
+		void Draw(sf::RenderWindow& window);
 
-		sf::FloatRect GetBounds() const;
+		void ReboundFromPlatform();
+
+		const sf::Vector2f& GetPosition() const { return sprite.getPosition(); }
 
 	private:
-		void BounceX();
-		void BounceY();
-
 		sf::Sprite sprite;
 		sf::Texture texture;
-		sf::Vector2f velocity;
+		sf::Vector2f direction;
 	};
 }

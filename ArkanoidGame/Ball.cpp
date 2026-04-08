@@ -4,63 +4,52 @@
 #include <assert.h>
 #include "Sprite.h"
 
+namespace
+{
+	// id textures
+
+	const std::string TEXTURE_ID = "Ball";
+}
+
 namespace ArkanoidGame
 {
 	void Ball::Init()
 	{
-		assert(texture.loadFromFile(TEXTURES_PATH + "Ball.png"));
+		assert(texture.loadFromFile(TEXTURES_PATH + TEXTURE_ID + ".png"));
 
 		InitSprite(sprite, BALL_SIZE, BALL_SIZE, texture);
-		sprite.setPosition(SCREEN_WIDTH / 2.f, SCREEN_HEGHT - PLATFORM_HEIGHT - BALL_SIZE / 2.f);
-		velocity = {250.f, -250.f};
+		sprite.setPosition(SCREEN_WIDTH / 2.f, SCREEN_HEIGHT - PLATFORM_HEIGHT - BALL_SIZE / 2.f);
+		
+		const float angle = 45.f + rand() % 90;	// [45, 135] degree
+		const auto pi = std::acos(-1.f);
+		direction.x = std::cos(pi / 180.f * angle);
+		direction.y = std::sin(pi / 180.f * angle);
 	}
 
-	void Ball::Update(float timeDelta, const Platform& platform)
+	void Ball::Update(float timeDelta)
 	{
-		sprite.move(velocity * timeDelta);
+		const auto pos = sprite.getPosition() + BALL_SPEED * timeDelta * direction;
+		sprite.setPosition(pos);
 
-		sf::FloatRect bounds = sprite.getGlobalBounds();
-
-		if (bounds.left <= 0 || bounds.left + bounds.width >= SCREEN_WIDTH)
+		if (pos.x <= 0 || pos.x >= SCREEN_WIDTH)
 		{
-			BounceX();
+			direction.x *= -1;
 		}
 
-		if (bounds.top <= 0)
+		if(pos.y <= 0 || pos.y >= SCREEN_HEIGHT)
 		{
-			BounceY();
-		}
-
-		// Jump off the platform
-		if (bounds.intersects(platform.GetBounds()) && velocity.y > 0)
-		{
-			BounceY();
-		}
-
-		// Fell down — reset
-		if (bounds.top + bounds.height >= SCREEN_HEGHT)
-		{
-			Init();
+			direction.y *= -1;
 		}
 	}
 
-	void Ball::Draw(sf::RenderWindow& window) const
+	void Ball::Draw(sf::RenderWindow& window)
 	{
-		window.draw(sprite);
+		DrawSprite(sprite, window);
 	}
 
-	sf::FloatRect Ball::GetBounds() const
+	void Ball::ReboundFromPlatform()
 	{
-		return sprite.getGlobalBounds();
+		direction.y *= -1;
 	}
 
-	void Ball::BounceX()
-	{
-		velocity.x = -velocity.x;
-	}
-
-	void Ball::BounceY()
-	{
-		velocity.y = -velocity.y;
-	}
 }
