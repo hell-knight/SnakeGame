@@ -3,6 +3,7 @@
 #include "GameSettings.h"
 #include <assert.h>
 #include "Sprite.h"
+#include "Block.h"
 
 namespace
 {
@@ -31,12 +32,12 @@ namespace ArkanoidGame
 		const auto pos = sprite.getPosition() + BALL_SPEED * timeDelta * direction;
 		sprite.setPosition(pos);
 
-		if (pos.x <= 0 || pos.x >= SCREEN_WIDTH)
+		if (pos.x - BALL_SIZE / 2.f <= 0 || pos.x + BALL_SIZE / 2.f >= SCREEN_WIDTH)
 		{
 			direction.x *= -1;
 		}
 
-		if(pos.y <= 0 || pos.y >= SCREEN_HEIGHT)
+		if(pos.y - BALL_SIZE / 2.f <= 0 || pos.y + BALL_SIZE / 2.f >= SCREEN_HEIGHT)
 		{
 			direction.y *= -1;
 		}
@@ -45,6 +46,23 @@ namespace ArkanoidGame
 	void Ball::ReboundFromPlatform()
 	{
 		direction.y *= -1;
+	}
+
+	void Ball::ReboundFromBlock(const Block& block)
+	{
+		const auto ballPos = sprite.getPosition();
+		const auto blockPos = block.GetPosition();
+		const float dX = std::fabs(ballPos.x - blockPos.x);
+		const float dY = std::fabs(ballPos.y - blockPos.y);
+
+		if (dX > dY)
+		{
+			direction.x *= -1.f;
+		}
+		else
+		{
+			direction.y *= -1.f;
+		}
 	}
 
 }

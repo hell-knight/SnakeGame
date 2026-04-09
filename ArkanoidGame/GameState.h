@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "GameStateData.h"
 
 namespace ArkanoidGame
 {
@@ -11,6 +12,7 @@ namespace ArkanoidGame
 		GameOver,
 		ExitDialog,
 		Records,
+		Win,
 	};
 
 	class GameState
@@ -19,25 +21,22 @@ namespace ArkanoidGame
 		GameState() = default;
 		GameState(GameStateType type, bool isExclusivelyVisible);
 		GameState(const GameState& state) = delete;
-		GameState(GameState&& state);
+		GameState(GameState&& state) { operator=(std::move(state)); }
 
 		~GameState();
 
 		GameState& operator=(const GameState& state) = delete;
 		GameState& operator=(GameState&& state) noexcept {
 			type = state.type;
-			data = state.data;
+			data = std::move(state.data);
 			isExclusivelyVisible = state.isExclusivelyVisible;
 			state.data = nullptr;
 			return *this;
 		}
 
 		GameStateType GetType() const { return type; }
-		//void* GetData() { return data; }
-		//const void* GetData() const { return data; }
-		bool IsExclusivelyVisible() const { return isExclusivelyVisible; }
 
-		//void SetExclusivelyVisible(bool value) { isExclusivelyVisible = value; }
+		bool IsExclusivelyVisible() const { return isExclusivelyVisible; }
 
 		template<class T>
 		T* GetData() const
@@ -50,10 +49,8 @@ namespace ArkanoidGame
 		void Draw(sf::RenderWindow& window);
 
 	private:
-		void* CopyData(const GameState& state) const;
-
 		GameStateType type = GameStateType::None;
-		void* data = nullptr;
+		std::unique_ptr<GameStateData> data = nullptr;
 		bool isExclusivelyVisible = false;
 	};
 }

@@ -21,6 +21,7 @@ namespace ArkanoidGame
 		scoreText.setFont(font);
 		scoreText.setCharacterSize(24);
 		scoreText.setFillColor(sf::Color::Yellow);
+		score = 0;
 
 		inputHintText.setFont(font);
 		inputHintText.setCharacterSize(24);
@@ -28,15 +29,28 @@ namespace ArkanoidGame
 		inputHintText.setString("Use arrow keys to move, ESC to pause");
 		inputHintText.setOrigin(GetTextOrigin(inputHintText, { 1.f, 0.f }));
 
-		platform.Init();
-		ball.Init();
+		//gameObjects.clear();
+		gameObjects.emplace_back(std::make_shared<Platform>());
+		gameObjects.emplace_back(std::make_shared<Ball>());
+
+		for (int i = 0; i < BLOCK_COLS; ++i)
+		{
+			for (int j = 0; j < BLOCK_ROWS; ++j)
+			{
+				auto block = std::make_shared<Block>();
+				gameObjects.emplace_back(block);
+				block->Init();
+				float x = BLOCK_START_X + i * (BLOCK_WIDTH + BLOCK_SPACING);
+				float y = BLOCK_START_Y + j * (BLOCK_HEIGHT + BLOCK_SPACING);
+				block->SetPosition({x, y});
+			}
+		}
+
+		gameObjects[0]->Init();
+		gameObjects[1]->Init();
 
 		// Init sounds
 		gameOverSound.setBuffer(gameOverSoundBuffer);
-	}
-
-	void GameStatePlayingData::Shutdown()
-	{
 	}
 
 	void GameStatePlayingData::HandleWindowEvent(const sf::Event& event)
@@ -52,22 +66,44 @@ namespace ArkanoidGame
 
 	void GameStatePlayingData::Update(float timeDelta)
 	{
-		platform.Update(timeDelta);
-		ball.Update(timeDelta);
-
-		const bool isCollision = platform.CheckCollisionWithBall(ball);
-		if (isCollision)
+		for (auto&& object : gameObjects)
 		{
-			ball.ReboundFromPlatform();
+			object->Update(timeDelta);
 		}
 
-		const bool isGameFinished = !isCollision && ball.GetPosition().y > platform.GetRect().top;
+		const Platform* platform = (Platform*)gameObjects[0].get();
+		Ball* ball = (Ball*)gameObjects[1].get();
+
+		bool isCollision = platform->CheckCollisionWithBall(*ball);
+		if (isCollision)
+		{
+			ball->ReboundFromPlatform();
+		}
 		
-		if (isGameFinished)
+		for (size_t i = 2; i < gameObjects.size(); ++i)
+		{
+			Block* block = (Block*)gameObjects[i].get();
+				if (block->CheckCollisionWithBall(*ball))
+				{
+					ball->ReboundFromBlock(*block);
+					score += GAME_POINT;
+					scoreText.setString("Score: " + std::to_string(score));
+					std::swap(gameObjects[i], gameObjects.back());
+					gameObjects.pop_back();
+					--i;
+				}
+		}
+		
+		const bool isGameFinished = !isCollision && ball->GetPosition().y > platform->GetRect().top;
+		const bool isGameWin = gameObjects.size() == 2;
+		Game& game = Application::Instance().GetGame();
+		if (isGameWin)
+		{
+			game.PushState(GameStateType::Win, false);
+		}
+		else if (isGameFinished)
 		{
 			gameOverSound.play();
-
-			Game& game = Application::Instance().GetGame();
 
 			// Find player in records table and update his score
 			game.PushState(GameStateType::GameOver, false);
@@ -80,8 +116,10 @@ namespace ArkanoidGame
 		window.draw(background);
 
 		// Draw game objects
-		platform.Draw(window);
-		ball.Draw(window);
+		for (auto&& object : gameObjects)
+		{
+			object->Draw(window);
+		}
 
 		scoreText.setOrigin(GetTextOrigin(scoreText, { 0.f, 0.f }));
 		scoreText.setPosition(10.f, 10.f);

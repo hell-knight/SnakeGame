@@ -1,4 +1,4 @@
-#include "GameStateGameOver.h"
+#include "GameStateWin.h"
 #include "Application.h"
 #include "Game.h"
 #include "Text.h"
@@ -7,23 +7,21 @@
 
 namespace ArkanoidGame
 {
-	const char* PLAYER_NAME = "Player";
-
-	void GameStateGameOverData::Init()
+	void GameStateWinData::Init()
 	{
 		assert(font.loadFromFile(RESOURCES_PATH + "Fonts/Roboto-Regular.ttf"));
 
-		timeSinceGameOver = 0.f;
+		timeSinceWin = 0.f;
 
 		sf::Color backgroundColor = sf::Color::Black;
 		backgroundColor.a = 200; // a means Alfa, opacity
 		background.setFillColor(backgroundColor);
 
-		gameOverText.setFont(font);
-		gameOverText.setCharacterSize(48);
-		gameOverText.setStyle(sf::Text::Bold);
-		gameOverText.setFillColor(sf::Color::Red);
-		gameOverText.setString("GAME OVER");
+		winText.setFont(font);
+		winText.setCharacterSize(48);
+		winText.setStyle(sf::Text::Bold);
+		winText.setFillColor(sf::Color::Red);
+		winText.setString("YOU WIN");
 
 		recordsTableTexts.reserve(MAX_RECORDS_TABLE_SIZE);
 
@@ -75,7 +73,7 @@ namespace ArkanoidGame
 		hintText.setString("Press Space to restart\nEsc to exit to main menu");
 	}
 
-	void GameStateGameOverData::HandleWindowEvent(const sf::Event& event)
+	void GameStateWinData::HandleWindowEvent(const sf::Event& event)
 	{
 		Game& game = Application::Instance().GetGame();
 		if (event.type == sf::Event::KeyPressed)
@@ -91,16 +89,16 @@ namespace ArkanoidGame
 		}
 	}
 
-	void GameStateGameOverData::Update(float timeDelta)
+	void GameStateWinData::Update(float timeDelta)
 	{
-		timeSinceGameOver += timeDelta;
+		timeSinceWin += timeDelta;
 
-		sf::Color gameOverTextColor = (int)timeSinceGameOver % 2 ? sf::Color::Red : sf::Color::Yellow;
-		gameOverText.setFillColor(gameOverTextColor);
+		sf::Color winTextColor = (int)timeSinceWin % 2 ? sf::Color::Red : sf::Color::Yellow;
+		winText.setFillColor(winTextColor);
 
 	}
 
-	void GameStateGameOverData::Draw(sf::RenderWindow& window)
+	void GameStateWinData::Draw(sf::RenderWindow& window)
 	{
 		sf::Vector2f viewSize = window.getView().getSize();
 
@@ -108,9 +106,9 @@ namespace ArkanoidGame
 		background.setSize(viewSize);
 		window.draw(background);
 
-		gameOverText.setOrigin(GetTextOrigin(gameOverText, { 0.5f, 1.f }));
-		gameOverText.setPosition(viewSize.x / 2.f, viewSize.y / 2 - 50.f);
-		window.draw(gameOverText);
+		winText.setOrigin(GetTextOrigin(winText, { 0.5f, 1.f }));
+		winText.setPosition(viewSize.x / 2.f, viewSize.y / 2 - 50.f);
+		window.draw(winText);
 
 		// We need to create new vector here as DrawItemsList needs vector of pointers
 		std::vector<sf::Text*> textsList;

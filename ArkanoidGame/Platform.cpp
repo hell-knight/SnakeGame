@@ -34,7 +34,7 @@ namespace ArkanoidGame
 		}
 	}
 
-	bool Platform::CheckCollisionWithBall(const Ball& ball)
+	bool Platform::CheckCollisionWithBall(const Ball& ball) const
 	{
 		auto sqr = [](float x) {
 			return x * x;

@@ -109,11 +109,6 @@ namespace ArkanoidGame
 		menu.Init(mainMenu);
 	}
 
-	void GameStateMainMenuData::Shutdown()
-	{
-		// No need to do anything here
-	}
-
 	void GameStateMainMenuData::HandleWindowEvent(const sf::Event& event)
 	{
 		if (event.type == sf::Event::KeyPressed)

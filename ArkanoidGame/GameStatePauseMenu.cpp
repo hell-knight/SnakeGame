@@ -42,11 +42,6 @@ namespace ArkanoidGame
 		menu.Init(pauseMenu);
 	}
 
-	void GameStatePauseMenuData::Shutdown()
-	{
-		// We dont need to free resources here, because they will be freed automatically
-	}
-
 	void GameStatePauseMenuData::HandleWindowEvent(const sf::Event& event)
 	{
 		Game& game = Application::Instance().GetGame();

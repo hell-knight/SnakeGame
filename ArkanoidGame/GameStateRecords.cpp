@@ -47,11 +47,6 @@ namespace ArkanoidGame
 		hintText.setCharacterSize(24);
 	}
 
-	void GameStateRecordsData::Shutdown()
-	{
-		// Nothing to clear here
-	}
-
 	void GameStateRecordsData::HandleWindowEvent(const sf::Event& event)
 	{
 		if (event.type == sf::Event::KeyPressed)

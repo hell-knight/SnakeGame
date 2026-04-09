@@ -6,7 +6,7 @@ namespace ArkanoidGame
 {
 	class Game;
 
-	class GameStateGameOverData : public GameStateData
+	class GameStateWinData : public GameStateData
 	{
 	public:
 		void Init() override;
@@ -18,11 +18,11 @@ namespace ArkanoidGame
 		// Resources
 		sf::Font font;
 
-		float timeSinceGameOver = 0.f;
+		float timeSinceWin = 0.f;
 
 		// UI data
 		sf::RectangleShape background;
-		sf::Text gameOverText;
+		sf::Text winText;
 		sf::Text hintText;
 		std::vector<sf::Text> recordsTableTexts;
 	};
