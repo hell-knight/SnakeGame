@@ -34,11 +34,6 @@ namespace ArkanoidGame
 		}
 	}
 
-	void Platform::Draw(sf::RenderWindow& window)
-	{
-		DrawSprite(sprite, window);
-	}
-
 	bool Platform::CheckCollisionWithBall(const Ball& ball)
 	{
 		auto sqr = [](float x) {

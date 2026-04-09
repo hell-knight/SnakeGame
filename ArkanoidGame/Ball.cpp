@@ -42,11 +42,6 @@ namespace ArkanoidGame
 		}
 	}
 
-	void Ball::Draw(sf::RenderWindow& window)
-	{
-		DrawSprite(sprite, window);
-	}
-
 	void Ball::ReboundFromPlatform()
 	{
 		direction.y *= -1;

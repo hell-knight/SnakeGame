@@ -49,6 +49,9 @@
     <ClCompile Include="Ball.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameStateMainMenu.h">
@@ -94,6 +97,9 @@
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="Ball.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>
