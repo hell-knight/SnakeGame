@@ -4,7 +4,7 @@
 #include "GameStatePauseMenu.h"
 #include "GameStateMainMenu.h"
 #include "GameStateRecords.h"
-#include "GameStateWin.h"
+#include "GameStateGameWin.h"
 #include <assert.h>
 #include "GameStateData.h"
 
@@ -41,9 +41,9 @@ namespace ArkanoidGame
 			data = std::make_unique<GameStateRecordsData>();
 			break;
 		}
-		case GameStateType::Win:
+		case GameStateType::GameWin:
 		{
-			data = std::make_unique<GameStateWinData>();
+			data = std::make_unique<GameStateGameWinData>();
 			break;
 		}
 		default:

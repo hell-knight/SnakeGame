@@ -58,7 +58,7 @@
     <ClCompile Include="Block.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="GameStateWin.cpp">
+    <ClCompile Include="GameStateGameWin.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -117,7 +117,7 @@
     <ClInclude Include="Block.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="GameStateWin.h">
+    <ClInclude Include="GameStateGameWin.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>

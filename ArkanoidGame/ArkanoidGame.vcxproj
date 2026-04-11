@@ -32,7 +32,7 @@
     <ClCompile Include="GameStatePauseMenu.cpp" />
     <ClCompile Include="GameStatePlaying.cpp" />
     <ClCompile Include="GameStateRecords.cpp" />
-    <ClCompile Include="GameStateWin.cpp" />
+    <ClCompile Include="GameStateGameWin.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -52,7 +52,7 @@
     <ClInclude Include="GameStatePauseMenu.h" />
     <ClInclude Include="GameStatePlaying.h" />
     <ClInclude Include="GameStateRecords.h" />
-    <ClInclude Include="GameStateWin.h" />
+    <ClInclude Include="GameStateGameWin.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="Sprite.h" />

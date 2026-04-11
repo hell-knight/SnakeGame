@@ -4,17 +4,15 @@
 
 namespace ArkanoidGame
 {
-	class Platform;
-	class Block;
-
 	class Ball : public GameObject
 	{
 	public:
-		void Init() override;
+		Ball(const sf::Vector2f& position);
+
 		void Update(float timeDelta) override;
 
-		void ReboundFromPlatform();
-		void ReboundFromBlock(const Block& block);
+		void InvertDirectionX();
+		void InvertDirectionY();
 
 	private:
 		sf::Vector2f direction;

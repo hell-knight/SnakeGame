@@ -1,4 +1,4 @@
-#include "GameStateWin.h"
+#include "GameStateGameWin.h"
 #include "Application.h"
 #include "Game.h"
 #include "Text.h"
@@ -7,11 +7,11 @@
 
 namespace ArkanoidGame
 {
-	void GameStateWinData::Init()
+	void GameStateGameWinData::Init()
 	{
 		assert(font.loadFromFile(RESOURCES_PATH + "Fonts/Roboto-Regular.ttf"));
 
-		timeSinceWin = 0.f;
+		timeSinceGameWin = 0.f;
 
 		sf::Color backgroundColor = sf::Color::Black;
 		backgroundColor.a = 200; // a means Alfa, opacity
@@ -73,7 +73,7 @@ namespace ArkanoidGame
 		hintText.setString("Press Space to restart\nEsc to exit to main menu");
 	}
 
-	void GameStateWinData::HandleWindowEvent(const sf::Event& event)
+	void GameStateGameWinData::HandleWindowEvent(const sf::Event& event)
 	{
 		Game& game = Application::Instance().GetGame();
 		if (event.type == sf::Event::KeyPressed)
@@ -89,16 +89,16 @@ namespace ArkanoidGame
 		}
 	}
 
-	void GameStateWinData::Update(float timeDelta)
+	void GameStateGameWinData::Update(float timeDelta)
 	{
-		timeSinceWin += timeDelta;
+		timeSinceGameWin += timeDelta;
 
-		sf::Color winTextColor = (int)timeSinceWin % 2 ? sf::Color::Red : sf::Color::Yellow;
+		sf::Color winTextColor = (int)timeSinceGameWin % 2 ? sf::Color::Red : sf::Color::Yellow;
 		winText.setFillColor(winTextColor);
 
 	}
 
-	void GameStateWinData::Draw(sf::RenderWindow& window)
+	void GameStateGameWinData::Draw(sf::RenderWindow& window)
 	{
 		sf::Vector2f viewSize = window.getView().getSize();
 

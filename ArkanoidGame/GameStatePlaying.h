@@ -4,7 +4,6 @@
 #include "Platform.h"
 #include "Ball.h"
 #include "GameStateData.h"
-#include "Block.h"
 
 namespace ArkanoidGame
 {

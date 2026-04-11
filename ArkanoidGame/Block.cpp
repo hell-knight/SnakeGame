@@ -10,13 +10,13 @@ namespace
 
 namespace ArkanoidGame
 {
-	void Block::Init()
+	Block::Block(const sf::Vector2f& position)
+		:GameObject(TEXTURES_PATH + TEXTURE_ID + ".png", position, BLOCK_WIDTH, BLOCK_HEIGHT)
 	{
-		assert(texture.loadFromFile(TEXTURES_PATH + TEXTURE_ID + ".png"));
-		InitSprite(sprite, BLOCK_WIDTH, BLOCK_HEIGHT, texture);
 		sprite.setColor(sf::Color::Green);
 
 	}
+
 	bool Block::CheckCollisionWithBall(const Ball& ball) const
 	{
 		const auto rect = GetRect();

@@ -1,6 +1,5 @@
 #include "Platform.h"
 #include "GameSettings.h"
-#include <assert.h>
 #include "Sprite.h"
 #include <algorithm>
 #include "Ball.h"
@@ -12,12 +11,9 @@ namespace
 
 namespace ArkanoidGame
 {
-	void Platform::Init()
+	Platform::Platform(const sf::Vector2f& position)
+		: GameObject(TEXTURES_PATH + TEXTURE_ID + ".png", position, PLATFORM_WIDTH, PLATFORM_HEIGHT)
 	{
-		assert(texture.loadFromFile(TEXTURES_PATH + TEXTURE_ID + ".png"));
-		
-		InitSprite(sprite, PLATFORM_WIDTH, PLATFORM_HEIGHT, texture);
-		sprite.setPosition(SCREEN_WIDTH / 2.f, SCREEN_HEIGHT - PLATFORM_HEIGHT / 2.f);
 	}
 
 	void Platform::Update(float timeDelta)

@@ -1,9 +1,6 @@
 #include "Ball.h"
-#include "Platform.h"
 #include "GameSettings.h"
-#include <assert.h>
 #include "Sprite.h"
-#include "Block.h"
 
 namespace
 {
@@ -14,13 +11,9 @@ namespace
 
 namespace ArkanoidGame
 {
-	void Ball::Init()
+	Ball::Ball(const sf::Vector2f& position)
+		: GameObject(TEXTURES_PATH + TEXTURE_ID + ".png", position, BALL_SIZE, BALL_SIZE)
 	{
-		assert(texture.loadFromFile(TEXTURES_PATH + TEXTURE_ID + ".png"));
-
-		InitSprite(sprite, BALL_SIZE, BALL_SIZE, texture);
-		sprite.setPosition(SCREEN_WIDTH / 2.f, SCREEN_HEIGHT - PLATFORM_HEIGHT - BALL_SIZE / 2.f);
-		
 		const float angle = 45.f + rand() % 90;	// [45, 135] degree
 		const auto pi = std::acos(-1.f);
 		direction.x = std::cos(pi / 180.f * angle);
@@ -43,26 +36,14 @@ namespace ArkanoidGame
 		}
 	}
 
-	void Ball::ReboundFromPlatform()
+	void Ball::InvertDirectionX()
 	{
-		direction.y *= -1;
+		direction.x *= -1;
 	}
 
-	void Ball::ReboundFromBlock(const Block& block)
+	void Ball::InvertDirectionY()
 	{
-		const auto ballPos = sprite.getPosition();
-		const auto blockPos = block.GetPosition();
-		const float dX = std::fabs(ballPos.x - blockPos.x);
-		const float dY = std::fabs(ballPos.y - blockPos.y);
-
-		if (dX > dY)
-		{
-			direction.x *= -1.f;
-		}
-		else
-		{
-			direction.y *= -1.f;
-		}
+		direction.y *= -1;
 	}
 
 }
