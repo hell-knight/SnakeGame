@@ -63,7 +63,7 @@ namespace ArkanoidGame
 		{
 			auto rect = GetRect();
 			auto ballPosInPlatform = (ball->GetPosition().x - (rect.left + rect.width / 2.f)) / (rect.width / 2.f);
-			ball->ChsngeAngle(90.f - 20.f * ballPosInPlatform);
+			ball->ChangeAngle(90.f - 20.f * ballPosInPlatform);
 			return true;
 		}
 		return false;

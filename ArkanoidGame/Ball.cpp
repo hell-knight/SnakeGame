@@ -55,7 +55,7 @@ namespace ArkanoidGame
 		return GetRect().intersects(gameObject->GetRect());
 	}
 
-	void Ball::ChsngeAngle(float angle)
+	void Ball::ChangeAngle(float angle)
 	{
 		lastAngle = angle;
 		const auto pi = std::acos(-1.f);
@@ -66,7 +66,7 @@ namespace ArkanoidGame
 	void Ball::OnHit()
 	{
 		lastAngle += random<float>(-5, 5);
-		ChsngeAngle(lastAngle);
+		ChangeAngle(lastAngle);
 	}
 
 }

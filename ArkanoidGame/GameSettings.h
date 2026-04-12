@@ -43,6 +43,8 @@ namespace ArkanoidGame
 	const unsigned int BLOCK_SHIFT = 5;
 	const unsigned int BLOCK_WIDTH = (SCREEN_WIDTH - (BLOCKS_COUNT_IN_ROW + 1) * BLOCK_SHIFT) / BLOCKS_COUNT_IN_ROW;
 	const unsigned int BLOCK_HEIGHT = 20;
+	const unsigned int BLOCK_UNBREACKABLE = 3;
+	const unsigned int BLOCK_GLASS = BLOCKS_COUNT_IN_ROW - 2 * BLOCK_UNBREACKABLE;
 
 	const int MAX_RECORDS_TABLE_SIZE = 5;
 	extern const char* PLAYER_NAME; // We need to define this constant in some SPP

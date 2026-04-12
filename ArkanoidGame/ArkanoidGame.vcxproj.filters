@@ -61,6 +61,12 @@
     <ClCompile Include="GameStateGameWin.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="DurableBlock.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GlassBlock.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameStateMainMenu.h">
@@ -127,6 +133,12 @@
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="IDelayedAction.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="DurableBlock.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="GlassBlock.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>

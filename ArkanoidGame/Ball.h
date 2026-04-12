@@ -17,7 +17,7 @@ namespace ArkanoidGame
 		void InvertDirectionY();
 
 		bool GetCollision(std::shared_ptr<Collidable> collidableObject) const override;
-		void ChsngeAngle(float angle);
+		void ChangeAngle(float angle);
 
 	private:
 		void OnHit();

@@ -22,6 +22,7 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="Block.cpp" />
+    <ClCompile Include="DurableBlock.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -33,6 +34,7 @@
     <ClCompile Include="GameStatePlaying.cpp" />
     <ClCompile Include="GameStateRecords.cpp" />
     <ClCompile Include="GameStateGameWin.cpp" />
+    <ClCompile Include="GlassBlock.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -43,6 +45,7 @@
     <ClInclude Include="Ball.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="Collidable.h" />
+    <ClInclude Include="DurableBlock.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameSettings.h" />
@@ -54,6 +57,7 @@
     <ClInclude Include="GameStatePlaying.h" />
     <ClInclude Include="GameStateRecords.h" />
     <ClInclude Include="GameStateGameWin.h" />
+    <ClInclude Include="GlassBlock.h" />
     <ClInclude Include="IDelayedAction.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Platform.h" />

@@ -5,6 +5,8 @@
 #include <assert.h>
 #include <sstream>
 #include "Block.h"
+#include "DurableBlock.h"
+#include "GlassBlock.h"
 
 namespace ArkanoidGame
 {
@@ -73,13 +75,18 @@ namespace ArkanoidGame
 		blocks.erase(
 			std::remove_if(blocks.begin(), blocks.end(),
 				[ball, &hasBrokeOneBlock, &needInverseDirX, &needInverseDirY, this](auto block) {
-					if ((!hasBrokeOneBlock) && block->CheckCollision(ball))
+					bool collided = block->CheckCollision(ball);
+					if (collided)
 					{
-						hasBrokeOneBlock = true;
-						const auto ballPos = ball->GetPosition();
-						const auto blockRect = block->GetRect();
+						// Rebound applies only to standard blocks
+						if ((!hasBrokeOneBlock) && block->AffectsBallDirection())
+						{
+							hasBrokeOneBlock = true;
+							const auto ballPos = ball->GetPosition();
+							const auto blockRect = block->GetRect();
 
-						GetBallInverse(ballPos, blockRect, needInverseDirX, needInverseDirY);
+							GetBallInverse(ballPos, blockRect, needInverseDirX, needInverseDirY);
+						}
 					}
 					return block->IsBroken();
 				}),
@@ -138,13 +145,40 @@ namespace ArkanoidGame
 		{
 			for (int col = 0; col < BLOCKS_COUNT_IN_ROW; ++col)
 			{
+				sf::Vector2f position = {
+					BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT),
+					100.f + row * BLOCK_HEIGHT };
+				/*
 				blocks.emplace_back(std::make_shared<SmoothDestroyableBlock>(sf::Vector2f({
 					BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT),
 					100.f + row * BLOCK_HEIGHT })));
+					*/
+				if ((row + col) % 3 == 0)
+				{
+					blocks.emplace_back(std::make_shared<DurableBlock>(position));
+				}
+				else
+				{
+					blocks.emplace_back(std::make_shared<SmoothDestroyableBlock>(position));
+				}
 			}
 		}
+		
+		for (int col = 0; col < BLOCK_UNBREACKABLE; ++col)
+		{
+			blocks.emplace_back(std::make_shared<UnbreackableBlock>(sf::Vector2f({
+				BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT),
+				100.f + row * BLOCK_HEIGHT })));
+		}
 
-		for (int col = 0; col < 3; ++col)
+		for (int col = BLOCK_UNBREACKABLE; col < BLOCK_GLASS + BLOCK_UNBREACKABLE; ++col)
+		{
+			blocks.emplace_back(std::make_shared<GlassBlock>(sf::Vector2f({
+				BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT),
+				100.f + row * BLOCK_HEIGHT })));
+		}
+
+		for (int col = BLOCK_GLASS + BLOCK_UNBREACKABLE; col < BLOCK_GLASS + 2 * BLOCK_UNBREACKABLE; ++col)
 		{
 			blocks.emplace_back(std::make_shared<UnbreackableBlock>(sf::Vector2f({
 				BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT),
