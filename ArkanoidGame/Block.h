@@ -1,16 +1,20 @@
 #pragma once
 #include "GameObject.h"
 #include "Ball.h"
+#include "Collidable.h"
 
 namespace ArkanoidGame
 {
-	class Block : public GameObject
+	class Block : public GameObject, public Collidable
 	{
+	protected:
+		void OnHit();
+		int hitCount = 1;
 	public:
-		Block(const sf::Vector2f& position);
-
-		void Update(float timeDelta) override {}
-
-		bool CheckCollisionWithBall(const Ball& ball) const;
+		Block(const sf::Vector2f& position, const sf::Color& color = sf::Color::Green);
+		virtual ~Block();
+		bool GetCollision(std::shared_ptr<Collidable> collidableObject) const override;
+		void Update(float timeDelta) override;
+		bool IsBroken();
 	};
 }

@@ -8,6 +8,7 @@
 namespace ArkanoidGame
 {
 	class Game;
+	class Block;
 
 	class GameStatePlayingData : public GameStateData
 	{
@@ -18,6 +19,10 @@ namespace ArkanoidGame
 		void Draw(sf::RenderWindow& window) override;
 
 	private:
+		void createBlocks();
+		void GetBallInverse(const sf::Vector2f ballPos, const sf::FloatRect& blockRect,
+			bool& needInverseDirX, bool& needInverseDirY);
+
 		// Resources
 		sf::Font font;
 		sf::SoundBuffer eatAppleSoundBuffer;
@@ -25,6 +30,7 @@ namespace ArkanoidGame
 
 		// Game data
 		std::vector<std::shared_ptr<GameObject>> gameObjects;
+		std::vector<std::shared_ptr<Block>> blocks;
 		int score = 0;
 
 		// UI data

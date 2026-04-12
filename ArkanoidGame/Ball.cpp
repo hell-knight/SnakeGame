@@ -1,6 +1,8 @@
 #include "Ball.h"
 #include "GameSettings.h"
 #include "Sprite.h"
+#include "assert.h"
+#include "randomizer.h"
 
 namespace
 {
@@ -14,7 +16,7 @@ namespace ArkanoidGame
 	Ball::Ball(const sf::Vector2f& position)
 		: GameObject(TEXTURES_PATH + TEXTURE_ID + ".png", position, BALL_SIZE, BALL_SIZE)
 	{
-		const float angle = 45.f + rand() % 90;	// [45, 135] degree
+		const float angle = 90.f;
 		const auto pi = std::acos(-1.f);
 		direction.x = std::cos(pi / 180.f * angle);
 		direction.y = std::sin(pi / 180.f * angle);
@@ -44,6 +46,27 @@ namespace ArkanoidGame
 	void Ball::InvertDirectionY()
 	{
 		direction.y *= -1;
+	}
+
+	bool Ball::GetCollision(std::shared_ptr<Collidable> collidableObject) const
+	{
+		auto gameObject = std::dynamic_pointer_cast<GameObject>(collidableObject);
+		assert(gameObject);
+		return GetRect().intersects(gameObject->GetRect());
+	}
+
+	void Ball::ChsngeAngle(float angle)
+	{
+		lastAngle = angle;
+		const auto pi = std::acos(-1.f);
+		direction.x = (angle / abs(angle)) * std::cos(pi / 180.f * angle);
+		direction.y = -1 * abs(std::sin(pi / 180.f * angle));
+	}
+
+	void Ball::OnHit()
+	{
+		lastAngle += random<float>(-5, 5);
+		ChsngeAngle(lastAngle);
 	}
 
 }

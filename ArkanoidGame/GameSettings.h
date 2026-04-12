@@ -22,6 +22,7 @@ namespace ArkanoidGame
 	const unsigned int SCREEN_HEIGHT = 600;
 	const float TIME_PER_FRAME = 1.f / 60.f; // 60 fps
 	const std::string GAME_NAME = "ArkanoidGame";
+	const float BREAK_DELAY = 1.1f;
 	const int GAME_POINT = 10;
 
 	/*

@@ -42,6 +42,7 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="Ball.h" />
     <ClInclude Include="Block.h" />
+    <ClInclude Include="Collidable.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameSettings.h" />
@@ -55,6 +56,7 @@
     <ClInclude Include="GameStateGameWin.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Platform.h" />
+    <ClInclude Include="randomizer.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Vector.h" />
