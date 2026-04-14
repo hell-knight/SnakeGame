@@ -13,7 +13,7 @@ namespace ArkanoidGame
 
 	int LevelLoader::GetLevelCount()
 	{
-		return levels.size();
+		return (int)levels.size();
 	}
 
 	void LevelLoader::LoadLevelsFromFile()

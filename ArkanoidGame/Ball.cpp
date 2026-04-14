@@ -14,7 +14,7 @@ namespace
 namespace ArkanoidGame
 {
 	Ball::Ball(const sf::Vector2f& position)
-		: GameObject(SETTINGS.TEXTURES_PATH + TEXTURE_ID + ".png", position, SETTINGS.BALL_SIZE, SETTINGS.BALL_SIZE)
+		: GameObject(SETTINGS.TEXTURES_PATH + TEXTURE_ID + ".png", position, (float)SETTINGS.BALL_SIZE, (float)SETTINGS.BALL_SIZE)
 	{
 		const float angle = 90.f;
 		const auto pi = std::acos(-1.f);

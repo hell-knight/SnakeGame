@@ -24,7 +24,7 @@ namespace ArkanoidGame
 		//factories.emplace(BlockType::Glass, std::make_unique<GlassBlockFactory>());
 
 		// Init background
-		background.setSize(sf::Vector2f(SETTINGS.SCREEN_WIDTH, SETTINGS.SCREEN_HEIGHT));
+		background.setSize(sf::Vector2f((float)SETTINGS.SCREEN_WIDTH, (float)SETTINGS.SCREEN_HEIGHT));
 		background.setPosition(0.f, 0.f);
 		background.setFillColor(sf::Color(0, 0, 0));
 
@@ -192,7 +192,7 @@ namespace ArkanoidGame
 		{
 			breackableCount += pair.second->GetcreatedBreackableBlocksCount();
 		}
-		unbreackableBlocksCount = blocks.size() - breackableCount;
+		unbreackableBlocksCount = (int)blocks.size() - breackableCount;
 	}
 
 	void GameStatePlayingData::GetBallInverse(const sf::Vector2f ballPos, const sf::FloatRect& blockRect, bool& needInverseDirX, bool& needInverseDirY)
