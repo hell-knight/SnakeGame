@@ -33,6 +33,68 @@ namespace ArkanoidGame
 		Shutdown();
 	}
 
+	void Game::StartGame()
+	{
+		SwitchStateTo(GameStateType::Playing);
+	}
+
+	void Game::PauseGame()
+	{
+		PushState(GameStateType::ExitDialog, false);
+	}
+
+	void Game::WinGame()
+	{
+		PushState(GameStateType::GameWin, false);
+	}
+
+	void Game::LooseGame()
+	{
+		PushState(GameStateType::GameOver, false);
+	}
+
+	void Game::UpdateGame(float timeDelta, sf::RenderWindow& window)
+	{
+		HandleWindowEvents(window);
+		if (Update(timeDelta))
+		{
+			// Draw everything here
+				// Clear the window first
+			window.clear();
+
+			Draw(window);
+
+			// End the current frame, display window contents on screen
+			window.display();
+		}
+		else
+		{
+			window.close();
+		}
+	}
+
+	void Game::ExitGame()
+	{
+		SwitchStateTo(GameStateType::MainMenu);
+	}
+
+	void Game::QuitGame()
+	{
+		SwitchStateTo(GameStateType::None);
+	}
+
+	void Game::ShowRecords()
+	{
+		PushState(GameStateType::Records, true);
+	}
+
+	void Game::LoadNextLevel()
+	{
+		assert(stateStack.back().GetType() == GameStateType::Playing);
+		auto playingData = (stateStack.back().GetData<GameStatePlayingData>());
+		playingData->LoadNextLevel();
+	}
+
 	void Game::HandleWindowEvents(sf::RenderWindow& window)
 	{
 		sf::Event event;

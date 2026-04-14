@@ -63,6 +63,15 @@ namespace ArkanoidGame
 		direction.y = -1 * abs(std::sin(pi / 180.f * angle));
 	}
 
+	void Ball::restart()
+	{
+		GameObject::restart();
+		const float angle = 90.f;
+		const auto pi = std::acos(-1.f);
+		direction.x = std::cos(pi / 180.f * angle);
+		direction.y = std::sin(pi / 180.f * angle);
+	}
+
 	void Ball::OnHit()
 	{
 		lastAngle += random<float>(-5, 5);

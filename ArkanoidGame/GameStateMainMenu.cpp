@@ -14,7 +14,7 @@ namespace ArkanoidGame
 		startGame.text.setFont(font);
 		startGame.text.setCharacterSize(24);
 		startGame.onPressCallBack = [](MenuItem&) {
-			Application::Instance().GetGame().SwitchStateTo(GameStateType::Playing);
+			Application::Instance().GetGame().StartGame();
 			};
 
 		const bool isInfiniteApples = Application::Instance().GetGame().IsEnableOptions(GameOptions::InfiniteApples);
@@ -60,7 +60,7 @@ namespace ArkanoidGame
 		recordsItem.text.setFont(font);
 		recordsItem.text.setCharacterSize(24);
 		recordsItem.onPressCallBack = [](MenuItem&) {
-			Application::Instance().GetGame().SwitchStateTo(GameStateType::Records);
+			Application::Instance().GetGame().ShowRecords();
 			};
 
 		MenuItem yesItem;
@@ -68,7 +68,7 @@ namespace ArkanoidGame
 		yesItem.text.setFont(font);
 		yesItem.text.setCharacterSize(24);
 		yesItem.onPressCallBack = [](MenuItem&) {
-			Application::Instance().GetGame().SwitchStateTo(GameStateType::None);
+			Application::Instance().GetGame().QuitGame();
 			};
 
 		MenuItem noItem;

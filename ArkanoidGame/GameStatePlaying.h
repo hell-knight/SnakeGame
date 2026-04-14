@@ -21,6 +21,7 @@ namespace ArkanoidGame
 		void HandleWindowEvent(const sf::Event& event) override;
 		void Update(float timeDelta) override;
 		void Draw(sf::RenderWindow& window) override;
+		void LoadNextLevel();
 
 	private:
 		void createBlocks();

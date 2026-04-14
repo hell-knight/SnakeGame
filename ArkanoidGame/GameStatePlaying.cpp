@@ -57,7 +57,7 @@ namespace ArkanoidGame
 		{
 			if (event.key.code == sf::Keyboard::Escape)
 			{
-				Application::Instance().GetGame().PushState(GameStateType::ExitDialog, false);
+				Application::Instance().GetGame().PauseGame();
 			}
 		}
 	}
@@ -115,23 +115,14 @@ namespace ArkanoidGame
 		Game& game = Application::Instance().GetGame();
 		if (isGameWin)
 		{
-			if (currentLevel >= levelLoader.GetLevelCount() - 1)
-			{
-				game.PushState(GameStateType::GameWin, false);
-			}
-			else
-			{
-				blocks.clear();
-				++currentLevel;
-				createBlocks();
-			}
+			game.LoadNextLevel();
 		}
 		else if (isGameOver)
 		{
 			gameOverSound.play();
 
 			// Find player in records table and update his score
-			game.PushState(GameStateType::GameOver, false);
+			game.LooseGame();
 		}
 	}
 
@@ -152,6 +143,27 @@ namespace ArkanoidGame
 		sf::Vector2f viewSize = window.getView().getSize();
 		inputHintText.setPosition(viewSize.x - 10.f, 10.f);
 		window.draw(inputHintText);
+	}
+
+	void GameStatePlayingData::LoadNextLevel()
+	{
+		if (currentLevel >= levelLoader.GetLevelCount() - 1)
+		{
+			Game& game = Application::Instance().GetGame();
+
+			game.WinGame();
+		}
+		else
+		{
+			std::shared_ptr<Platform> platform = std::dynamic_pointer_cast<Platform>(gameObjects[0]);
+			std::shared_ptr<Ball> ball = std::dynamic_pointer_cast<Ball>(gameObjects[1]);
+			platform->restart();
+			ball->restart();
+
+			blocks.clear();
+			++currentLevel;
+			createBlocks();
+		}
 	}
 
 	void GameStatePlayingData::createBlocks()
