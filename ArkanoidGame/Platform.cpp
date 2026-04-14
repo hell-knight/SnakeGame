@@ -12,7 +12,7 @@ namespace
 namespace ArkanoidGame
 {
 	Platform::Platform(const sf::Vector2f& position)
-		: GameObject(TEXTURES_PATH + TEXTURE_ID + ".png", position, PLATFORM_WIDTH, PLATFORM_HEIGHT)
+		: GameObject(SETTINGS.TEXTURES_PATH + TEXTURE_ID + ".png", position, SETTINGS.PLATFORM_WIDTH, SETTINGS.PLATFORM_HEIGHT)
 	{
 	}
 
@@ -22,11 +22,11 @@ namespace ArkanoidGame
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
-			Move(-timeDelta * PLATFORM_SPEED);
+			Move(-timeDelta * SETTINGS.PLATFORM_SPEED);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		{
-			Move(timeDelta * PLATFORM_SPEED);
+			Move(timeDelta * SETTINGS.PLATFORM_SPEED);
 		}
 	}
 
@@ -43,15 +43,15 @@ namespace ArkanoidGame
 		const auto ballPos = ball->GetPosition();
 		if (ballPos.x < rect.left)
 		{
-			return sqr(ballPos.x - rect.left) + sqr(ballPos.y - rect.top) < sqr(BALL_SIZE / 2.0);
+			return sqr(ballPos.x - rect.left) + sqr(ballPos.y - rect.top) < sqr(SETTINGS.BALL_SIZE / 2.0);
 		}
 
 		if (ballPos.x > rect.left + rect.width)
 		{
-			return sqr(ballPos.x - rect.left - rect.width) + sqr(ballPos.y - rect.top) < sqr(BALL_SIZE / 2.0);
+			return sqr(ballPos.x - rect.left - rect.width) + sqr(ballPos.y - rect.top) < sqr(SETTINGS.BALL_SIZE / 2.0);
 		}
 
-		return std::fabs(ballPos.y - rect.top) <= BALL_SIZE / 2.0;
+		return std::fabs(ballPos.y - rect.top) <= SETTINGS.BALL_SIZE / 2.0;
 	}
 
 	bool Platform::CheckCollision(std::shared_ptr<Collidable> collidable)
@@ -72,7 +72,7 @@ namespace ArkanoidGame
 	void Platform::Move(float speed)
 	{
 		auto position = sprite.getPosition();
-		position.x = std::clamp(position.x + speed, PLATFORM_WIDTH / 2.f , SCREEN_WIDTH - PLATFORM_WIDTH / 2.f);
+		position.x = std::clamp(position.x + speed, SETTINGS.PLATFORM_WIDTH / 2.f , SETTINGS.SCREEN_WIDTH - SETTINGS.PLATFORM_WIDTH / 2.f);
 		sprite.setPosition(position);
 	}
 }

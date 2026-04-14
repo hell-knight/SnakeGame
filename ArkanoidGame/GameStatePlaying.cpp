@@ -14,11 +14,11 @@ namespace ArkanoidGame
 	void GameStatePlayingData::Init()
 	{	
 		// Init game resources (terminate if error)
-		assert(font.loadFromFile(FONTS_PATH + "Roboto-Regular.ttf"));
-		assert(gameOverSoundBuffer.loadFromFile(SOUNDS_PATH + "Death.wav"));
+		assert(font.loadFromFile(SETTINGS.FONTS_PATH + "Roboto-Regular.ttf"));
+		assert(gameOverSoundBuffer.loadFromFile(SETTINGS.SOUNDS_PATH + "Death.wav"));
 
 		// Init background
-		background.setSize(sf::Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT));
+		background.setSize(sf::Vector2f(SETTINGS.SCREEN_WIDTH, SETTINGS.SCREEN_HEIGHT));
 		background.setPosition(0.f, 0.f);
 		background.setFillColor(sf::Color(0, 0, 0));
 
@@ -35,9 +35,9 @@ namespace ArkanoidGame
 
 		//gameObjects.clear();
 		gameObjects.emplace_back(std::make_shared<Platform>(
-			sf::Vector2f({SCREEN_WIDTH / 2.f, SCREEN_HEIGHT - PLATFORM_HEIGHT / 2.f})));
+			sf::Vector2f({ SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT - SETTINGS.PLATFORM_HEIGHT / 2.f})));
 		gameObjects.emplace_back(std::make_shared<Ball>(
-			sf::Vector2f({ SCREEN_WIDTH / 2.f, SCREEN_HEIGHT - PLATFORM_HEIGHT - BALL_SIZE / 2.f })));
+			sf::Vector2f({ SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT - SETTINGS.PLATFORM_HEIGHT - SETTINGS.BALL_SIZE / 2.f })));
 
 		createBlocks();
 
@@ -142,13 +142,13 @@ namespace ArkanoidGame
 	void GameStatePlayingData::createBlocks()
 	{
 		int row = 0;
-		for (; row < BLOCKS_COUNT_ROWS; ++row)
+		for (; row < SETTINGS.BLOCKS_COUNT_ROWS; ++row)
 		{
-			for (int col = 0; col < BLOCKS_COUNT_IN_ROW; ++col)
+			for (int col = 0; col < SETTINGS.BLOCKS_COUNT_IN_ROW; ++col)
 			{
 				sf::Vector2f position = {
-					BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT),
-					100.f + row * BLOCK_HEIGHT };
+					SETTINGS.BLOCK_SHIFT + SETTINGS.BLOCK_WIDTH / 2.f + col * (SETTINGS.BLOCK_WIDTH + SETTINGS.BLOCK_SHIFT),
+					100.f + row * SETTINGS.BLOCK_HEIGHT };
 				/*
 				blocks.emplace_back(std::make_shared<SmoothDestroyableBlock>(sf::Vector2f({
 					BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT),
@@ -165,25 +165,25 @@ namespace ArkanoidGame
 			}
 		}
 		
-		for (int col = 0; col < BLOCK_UNBREACKABLE; ++col)
+		for (int col = 0; col < SETTINGS.BLOCK_UNBREACKABLE; ++col)
 		{
 			blocks.emplace_back(std::make_shared<UnbreackableBlock>(sf::Vector2f({
-				BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT),
-				100.f + row * BLOCK_HEIGHT })));
+				SETTINGS.BLOCK_SHIFT + SETTINGS.BLOCK_WIDTH / 2.f + col * (SETTINGS.BLOCK_WIDTH + SETTINGS.BLOCK_SHIFT),
+				100.f + row * SETTINGS.BLOCK_HEIGHT })));
 		}
 
-		for (int col = BLOCK_UNBREACKABLE; col < BLOCK_GLASS + BLOCK_UNBREACKABLE; ++col)
+		for (int col = SETTINGS.BLOCK_UNBREACKABLE; col < SETTINGS.BLOCK_GLASS + SETTINGS.BLOCK_UNBREACKABLE; ++col)
 		{
 			blocks.emplace_back(std::make_shared<GlassBlock>(sf::Vector2f({
-				BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT),
-				100.f + row * BLOCK_HEIGHT })));
+				SETTINGS.BLOCK_SHIFT + SETTINGS.BLOCK_WIDTH / 2.f + col * (SETTINGS.BLOCK_WIDTH + SETTINGS.BLOCK_SHIFT),
+				100.f + row * SETTINGS.BLOCK_HEIGHT })));
 		}
 
-		for (int col = BLOCK_GLASS + BLOCK_UNBREACKABLE; col < BLOCK_GLASS + 2 * BLOCK_UNBREACKABLE; ++col)
+		for (int col = SETTINGS.BLOCK_GLASS + SETTINGS.BLOCK_UNBREACKABLE; col < SETTINGS.BLOCK_GLASS + 2 * SETTINGS.BLOCK_UNBREACKABLE; ++col)
 		{
 			blocks.emplace_back(std::make_shared<UnbreackableBlock>(sf::Vector2f({
-				BLOCK_SHIFT + BLOCK_WIDTH / 2.f + col * (BLOCK_WIDTH + BLOCK_SHIFT),
-				100.f + row * BLOCK_HEIGHT })));
+				SETTINGS.BLOCK_SHIFT + SETTINGS.BLOCK_WIDTH / 2.f + col * (SETTINGS.BLOCK_WIDTH + SETTINGS.BLOCK_SHIFT),
+				100.f + row * SETTINGS.BLOCK_HEIGHT })));
 		}
 	}
 
