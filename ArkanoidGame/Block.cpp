@@ -36,6 +36,7 @@ namespace ArkanoidGame
 	void Block::OnHit()
 	{
 		hitCount = 0;
+		Emit();
 	}
 
 	bool Block::IsBroken()
@@ -46,6 +47,7 @@ namespace ArkanoidGame
 	void SmoothDestroyableBlock::OnHit()
 	{
 		StartTimer(SETTINGS.BREAK_DELAY);
+		Emit();
 	}
 
 	SmoothDestroyableBlock::SmoothDestroyableBlock(const sf::Vector2f& position, const sf::Color& color)

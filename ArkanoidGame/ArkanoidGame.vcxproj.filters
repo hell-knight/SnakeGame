@@ -155,5 +155,8 @@
     </ClInclude>
     <ClInclude Include="BlockFactory.h" />
     <ClInclude Include="LevelLoader.h" />
+    <ClInclude Include="IObserver.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

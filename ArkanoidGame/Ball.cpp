@@ -36,6 +36,7 @@ namespace ArkanoidGame
 		{
 			direction.y *= -1;
 		}
+		Emit();
 	}
 
 	void Ball::InvertDirectionX()

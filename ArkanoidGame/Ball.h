@@ -2,10 +2,11 @@
 #include <SFML/Graphics.hpp>
 #include "GameObject.h"
 #include "Collidable.h"
+#include "IObserver.h"
 
 namespace ArkanoidGame
 {
-	class Ball : public GameObject, public Collidable
+	class Ball : public GameObject, public Collidable, public IObservable
 	{
 	public:
 		Ball(const sf::Vector2f& position);

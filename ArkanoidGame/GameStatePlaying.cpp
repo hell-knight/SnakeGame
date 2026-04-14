@@ -42,8 +42,10 @@ namespace ArkanoidGame
 		//gameObjects.clear();
 		gameObjects.emplace_back(std::make_shared<Platform>(
 			sf::Vector2f({ SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT - SETTINGS.PLATFORM_HEIGHT / 2.f})));
-		gameObjects.emplace_back(std::make_shared<Ball>(
+		auto ball = (std::make_shared<Ball>(
 			sf::Vector2f({ SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT - SETTINGS.PLATFORM_HEIGHT - SETTINGS.BALL_SIZE / 2.f })));
+		ball->AddObserver(weak_from_this());
+		gameObjects.emplace_back(ball);
 
 		createBlocks();
 
@@ -109,21 +111,6 @@ namespace ArkanoidGame
 		{
 			ball->InvertDirectionY();
 		}
-		
-		const bool isGameOver = !isCollision && ball->GetPosition().y > platform->GetRect().top;
-		const bool isGameWin = blocks.size() <= unbreackableBlocksCount;
-		Game& game = Application::Instance().GetGame();
-		if (isGameWin)
-		{
-			game.LoadNextLevel();
-		}
-		else if (isGameOver)
-		{
-			gameOverSound.play();
-
-			// Find player in records table and update his score
-			game.LooseGame();
-		}
 	}
 
 	void GameStatePlayingData::Draw(sf::RenderWindow& window)
@@ -166,13 +153,34 @@ namespace ArkanoidGame
 		}
 	}
 
+	void GameStatePlayingData::Notify(std::shared_ptr<IObservable> observable)
+	{
+		if (auto block = std::dynamic_pointer_cast<Block>(observable); block)
+		{
+			--breackableBlocksCount;
+			Game& game = Application::Instance().GetGame();
+			if (breackableBlocksCount == 0)
+			{
+				game.LoadNextLevel();
+			}
+		}
+		else if (auto ball = std::dynamic_pointer_cast<Ball>(observable); ball)
+		{
+			if (ball->GetPosition().y > gameObjects.front()->GetRect().top)
+			{
+				gameOverSound.play();
+				Application::Instance().GetGame().LooseGame();
+			}
+		}
+	}
+
 	void GameStatePlayingData::createBlocks()
 	{
 		for (const auto& pair : factories)
 		{
 			pair.second->ClearCounter();
 		}
-		auto& settings = SETTINGS;
+		auto self = weak_from_this();
 
 		auto level = levelLoader.GetLevel(currentLevel);
 		for (auto pairPosBlockType : level.m_blocks)
@@ -181,18 +189,17 @@ namespace ArkanoidGame
 			sf::Vector2i pos = pairPosBlockType.first;
 
 			sf::Vector2f position{
-					(float)(settings.BLOCK_SHIFT + settings.BLOCK_WIDTH / 2.f + pos.x * (settings.BLOCK_WIDTH + settings.BLOCK_SHIFT))
-					, (float)pos.y * settings.BLOCK_HEIGHT };
+					(float)(SETTINGS.BLOCK_SHIFT + SETTINGS.BLOCK_WIDTH / 2.f + pos.x * (SETTINGS.BLOCK_WIDTH + SETTINGS.BLOCK_SHIFT))
+					, (float)pos.y * SETTINGS.BLOCK_HEIGHT };
 
 			blocks.emplace_back(factories.at(blockType)->CreateBlock(position));
+			blocks.back()->AddObserver(self);
 		}
 
-		int breackableCount = 0;
 		for (const auto& pair : factories)
 		{
-			breackableCount += pair.second->GetcreatedBreackableBlocksCount();
+			breackableBlocksCount += pair.second->GetcreatedBreackableBlocksCount();
 		}
-		unbreackableBlocksCount = (int)blocks.size() - breackableCount;
 	}
 
 	void GameStatePlayingData::GetBallInverse(const sf::Vector2f ballPos, const sf::FloatRect& blockRect, bool& needInverseDirX, bool& needInverseDirY)
