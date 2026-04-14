@@ -7,6 +7,7 @@
 #include "Block.h"
 #include "DurableBlock.h"
 #include "GlassBlock.h"
+#include "ThreeHitBlock.h"
 
 namespace ArkanoidGame
 {
@@ -155,7 +156,7 @@ namespace ArkanoidGame
 					*/
 				if ((row + col) % 3 == 0)
 				{
-					blocks.emplace_back(std::make_shared<DurableBlock>(position));
+					blocks.emplace_back(std::make_shared<ThreeHitBlock>(position));
 				}
 				else
 				{
