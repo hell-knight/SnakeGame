@@ -70,6 +70,12 @@
     <ClCompile Include="ThreeHitBlock.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="BlockFactory.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelLoader.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameStateMainMenu.h">
@@ -147,5 +153,7 @@
     <ClInclude Include="ThreeHitBlock.h">
       <Filter>Sources</Filter>
     </ClInclude>
+    <ClInclude Include="BlockFactory.h" />
+    <ClInclude Include="LevelLoader.h" />
   </ItemGroup>
 </Project>

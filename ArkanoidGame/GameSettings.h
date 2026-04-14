@@ -19,6 +19,7 @@ namespace ArkanoidGame
 		const std::string TEXTURES_PATH = RESOURCES_PATH + "Textures/";
 		const std::string FONTS_PATH = RESOURCES_PATH + "Fonts/";
 		const std::string SOUNDS_PATH = RESOURCES_PATH + "Sounds/";
+		const std::string LEVELS_CONFIG_PATH = RESOURCES_PATH + "levels.config";
 
 		const int MAX_APPLES = 80;
 

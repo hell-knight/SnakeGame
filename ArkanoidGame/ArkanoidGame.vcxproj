@@ -22,6 +22,7 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="Block.cpp" />
+    <ClCompile Include="BlockFactory.cpp" />
     <ClCompile Include="DurableBlock.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameMain.cpp" />
@@ -35,6 +36,7 @@
     <ClCompile Include="GameStateRecords.cpp" />
     <ClCompile Include="GameStateGameWin.cpp" />
     <ClCompile Include="GlassBlock.cpp" />
+    <ClCompile Include="LevelLoader.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -45,6 +47,7 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="Ball.h" />
     <ClInclude Include="Block.h" />
+    <ClInclude Include="BlockFactory.h" />
     <ClInclude Include="Collidable.h" />
     <ClInclude Include="DurableBlock.h" />
     <ClInclude Include="Game.h" />
@@ -60,6 +63,7 @@
     <ClInclude Include="GameStateGameWin.h" />
     <ClInclude Include="GlassBlock.h" />
     <ClInclude Include="IDelayedAction.h" />
+    <ClInclude Include="LevelLoader.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="randomizer.h" />

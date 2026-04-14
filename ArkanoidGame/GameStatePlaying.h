@@ -4,11 +4,15 @@
 #include "Platform.h"
 #include "Ball.h"
 #include "GameStateData.h"
+#include "LevelLoader.h"
+#include "BlockFactory.h"
+#include <unordered_map>
 
 namespace ArkanoidGame
 {
 	class Game;
 	class Block;
+	class BlockFactory;
 
 	class GameStatePlayingData : public GameStateData
 	{
@@ -41,5 +45,13 @@ namespace ArkanoidGame
 		// Sounds
 		sf::Sound eatAppleSound;
 		sf::Sound gameOverSound;
+
+		// Blocks creator
+		std::unordered_map<BlockType, std::unique_ptr<BlockFactory>> factories;
+		int unbreackableBlocksCount = 0;
+
+		// Levels
+		LevelLoader levelLoader;
+		int currentLevel = 0;
 	};
 }
