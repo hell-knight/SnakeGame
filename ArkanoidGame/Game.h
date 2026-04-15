@@ -34,8 +34,8 @@ namespace ArkanoidGame
 
 		void StartGame();
 		void PauseGame();
-		void WinGame();
-		void LooseGame();
+		void WinGame(const std::string name, const int score);
+		void LooseGame(const std::string name, const int score);
 		void UpdateGame(float timeDelta, sf::RenderWindow& window);
 		void ExitGame();
 		void QuitGame();

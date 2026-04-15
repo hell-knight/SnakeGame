@@ -78,6 +78,10 @@ namespace ArkanoidGame
 	void SmoothDestroyableBlock::FinalAction()
 	{
 		--hitCount;
+		if (hitCount <= 0)
+		{
+			Emit();
+		}
 	}
 
 	void SmoothDestroyableBlock::EachTickAction(float deltaTime)

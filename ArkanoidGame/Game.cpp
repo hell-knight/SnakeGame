@@ -43,13 +43,15 @@ namespace ArkanoidGame
 		PushState(GameStateType::ExitDialog, false);
 	}
 
-	void Game::WinGame()
+	void Game::WinGame(const std::string name, const int score)
 	{
+		UpdateRecord(name, score);
 		PushState(GameStateType::GameWin, false);
 	}
 
-	void Game::LooseGame()
+	void Game::LooseGame(const std::string name, const int score)
 	{
+		UpdateRecord(name, score);
 		PushState(GameStateType::GameOver, false);
 	}
 

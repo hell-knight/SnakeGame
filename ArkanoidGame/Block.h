@@ -19,6 +19,8 @@ namespace ArkanoidGame
 		void Update(float timeDelta) override;
 		bool IsBroken();
 		virtual bool AffectsBallDirection() const { return true; }
+
+		virtual int GetPoints() const = 0;
 	};
 
 	class SmoothDestroyableBlock : public Block, public IDelayedAction
@@ -34,6 +36,8 @@ namespace ArkanoidGame
 		bool GetCollision(std::shared_ptr<Collidable> collidableObject) const override;
 		void FinalAction() override;
 		void EachTickAction(float deltaTime) override;
+
+		int GetPoints() const override { return 20; }
 	};
 
 	class UnbreackableBlock : public Block
@@ -46,5 +50,6 @@ namespace ArkanoidGame
 			int i = 0;
 			++i;
 		}
+		int GetPoints() const override { return 0; }
 	};
 }

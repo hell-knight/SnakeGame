@@ -9,6 +9,7 @@ namespace ArkanoidGame
 	{
 	public:
 		ThreeHitBlock(const sf::Vector2f& position);
+		int GetPoints() const override { return 75; }
 
 	private:
 		void OnHit() override;

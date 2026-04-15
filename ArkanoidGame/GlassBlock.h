@@ -10,6 +10,7 @@ namespace ArkanoidGame
 		GlassBlock(const sf::Vector2f& position);
 		~GlassBlock() = default;
 		bool AffectsBallDirection() const override;
+		int GetPoints() const override { return 5; }
 		
 	private:
 		void OnHit() override;

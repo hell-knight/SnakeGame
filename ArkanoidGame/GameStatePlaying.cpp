@@ -31,6 +31,7 @@ namespace ArkanoidGame
 		scoreText.setFont(font);
 		scoreText.setCharacterSize(24);
 		scoreText.setFillColor(sf::Color::Yellow);
+		scoreText.setString("Score: " + std::to_string(score));
 		score = 0;
 
 		inputHintText.setFont(font);
@@ -83,10 +84,14 @@ namespace ArkanoidGame
 		// remove-erase idiom
 		blocks.erase(
 			std::remove_if(blocks.begin(), blocks.end(),
-				[ball, &hasBrokeOneBlock, &needInverseDirX, &needInverseDirY, this](auto block) {
+				[ball, &hasBrokeOneBlock, &needInverseDirX, &needInverseDirY, this](auto block) -> bool {
+					if (!block) { return true; }
+
 					bool collided = block->CheckCollision(ball);
 					if (collided)
 					{
+						score += block->GetPoints();
+
 						// Rebound applies only to standard blocks
 						if ((!hasBrokeOneBlock) && block->AffectsBallDirection())
 						{
@@ -111,6 +116,8 @@ namespace ArkanoidGame
 		{
 			ball->InvertDirectionY();
 		}
+
+		scoreText.setString("Score: " + std::to_string(score));
 	}
 
 	void GameStatePlayingData::Draw(sf::RenderWindow& window)
@@ -137,8 +144,8 @@ namespace ArkanoidGame
 		if (currentLevel >= levelLoader.GetLevelCount() - 1)
 		{
 			Game& game = Application::Instance().GetGame();
-
-			game.WinGame();
+			
+			game.WinGame(SETTINGS.PLAYER_NAME, score);
 		}
 		else
 		{
@@ -157,6 +164,7 @@ namespace ArkanoidGame
 	{
 		if (auto block = std::dynamic_pointer_cast<Block>(observable); block)
 		{
+		
 			--breackableBlocksCount;
 			Game& game = Application::Instance().GetGame();
 			if (breackableBlocksCount == 0)
@@ -169,7 +177,7 @@ namespace ArkanoidGame
 			if (ball->GetPosition().y > gameObjects.front()->GetRect().top)
 			{
 				gameOverSound.play();
-				Application::Instance().GetGame().LooseGame();
+				Application::Instance().GetGame().LooseGame(SETTINGS.PLAYER_NAME, score);
 			}
 		}
 	}
