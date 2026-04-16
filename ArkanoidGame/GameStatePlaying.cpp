@@ -87,30 +87,66 @@ namespace ArkanoidGame
 		bool needInverseDirY = false;
 		bool hasBrokeOneBlock = false;
 		// remove-erase idiom
-		blocks.erase(
-			std::remove_if(blocks.begin(), blocks.end(),
-				[ball, &hasBrokeOneBlock, &needInverseDirX, &needInverseDirY, this](auto block) -> bool {
-					if (!block) { return true; }
+		//blocks.erase(
+		//	std::remove_if(blocks.begin(), blocks.end(),
+		//		[ball, &hasBrokeOneBlock, &needInverseDirX, &needInverseDirY, this](auto block) -> bool {
+		//			if (!block) { return true; }
 
-					bool collided = block->CheckCollision(ball);
-					if (collided)
-					{
-						//score += block->GetPoints();
-						SaveState();
-						// Rebound applies only to standard blocks
-						if ((!hasBrokeOneBlock) && block->AffectsBallDirection())
-						{
-							hasBrokeOneBlock = true;
-							const auto ballPos = ball->GetPosition();
-							const auto blockRect = block->GetRect();
+		//			bool collided = block->CheckCollision(ball);
+		//			if (collided)
+		//			{
+		//				//score += block->GetPoints();
+		//				SaveState();
+		//				// Rebound applies only to standard blocks
+		//				if ((!hasBrokeOneBlock) && block->AffectsBallDirection())
+		//				{
+		//					hasBrokeOneBlock = true;
+		//					const auto ballPos = ball->GetPosition();
+		//					const auto blockRect = block->GetRect();
 
-							GetBallInverse(ballPos, blockRect, needInverseDirX, needInverseDirY);
-						}
-					}
-					return block->IsBroken();
-				}),
-			blocks.end()
-		);
+		//					GetBallInverse(ballPos, blockRect, needInverseDirX, needInverseDirY);
+		//				}
+		//			}
+		//			return block->IsBroken();
+		//		}),
+		//	blocks.end()
+		//);
+
+		std::vector<std::shared_ptr<Block>> blocksToRemove;
+
+		for (auto& block : blocks)
+		{
+			if (!block) continue;
+
+			bool collided = block->CheckCollision(ball);
+			if (collided)
+			{
+				SaveState();
+				// Rebound applies only to standard blocks
+				if ((!hasBrokeOneBlock) && block->AffectsBallDirection())
+				{
+					hasBrokeOneBlock = true;
+					const auto ballPos = ball->GetPosition();
+					const auto blockRect = block->GetRect();
+
+					GetBallInverse(ballPos, blockRect, needInverseDirX, needInverseDirY);
+				}
+			}
+
+			if (block->IsBroken())
+			{
+				blocksToRemove.push_back(block);
+			}
+		}
+
+		for (const auto& toRemove : blocksToRemove)
+		{
+			auto it = std::find(blocks.begin(), blocks.end(), toRemove);
+			if (it != blocks.end())
+			{
+				blocks.erase(it);
+			}
+		}
 
 		if (needInverseDirX)
 		{
