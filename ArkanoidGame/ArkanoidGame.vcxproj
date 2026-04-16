@@ -37,6 +37,7 @@
     <ClCompile Include="GameStateGameWin.cpp" />
     <ClCompile Include="GlassBlock.cpp" />
     <ClCompile Include="LevelLoader.cpp" />
+    <ClCompile Include="Memento.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -67,6 +68,7 @@
     <ClInclude Include="LevelLoader.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Platform.h" />
+    <ClInclude Include="Memento.h" />
     <ClInclude Include="randomizer.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Text.h" />

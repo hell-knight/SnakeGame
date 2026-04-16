@@ -34,6 +34,11 @@ namespace ArkanoidGame
 		scoreText.setString("Score: " + std::to_string(score));
 		score = 0;
 
+		livesText.setFont(font);
+		livesText.setCharacterSize(24);
+		livesText.setFillColor(sf::Color::Red);
+		lives = 3;
+
 		inputHintText.setFont(font);
 		inputHintText.setCharacterSize(24);
 		inputHintText.setFillColor(sf::Color::White);
@@ -49,6 +54,7 @@ namespace ArkanoidGame
 		gameObjects.emplace_back(ball);
 
 		createBlocks();
+		SaveState();
 
 		// Init sounds
 		gameOverSound.setBuffer(gameOverSoundBuffer);
@@ -79,7 +85,6 @@ namespace ArkanoidGame
 
 		bool needInverseDirX = false;
 		bool needInverseDirY = false;
-		
 		bool hasBrokeOneBlock = false;
 		// remove-erase idiom
 		blocks.erase(
@@ -90,8 +95,8 @@ namespace ArkanoidGame
 					bool collided = block->CheckCollision(ball);
 					if (collided)
 					{
-						score += block->GetPoints();
-
+						//score += block->GetPoints();
+						SaveState();
 						// Rebound applies only to standard blocks
 						if ((!hasBrokeOneBlock) && block->AffectsBallDirection())
 						{
@@ -118,6 +123,8 @@ namespace ArkanoidGame
 		}
 
 		scoreText.setString("Score: " + std::to_string(score));
+		livesText.setString("Lives: " + std::to_string(lives));
+		//SaveState();
 	}
 
 	void GameStatePlayingData::Draw(sf::RenderWindow& window)
@@ -133,6 +140,10 @@ namespace ArkanoidGame
 		scoreText.setOrigin(GetTextOrigin(scoreText, { 0.f, 0.f }));
 		scoreText.setPosition(10.f, 10.f);
 		window.draw(scoreText);
+
+		livesText.setOrigin(GetTextOrigin(livesText, { 0.f, 0.f }));
+		livesText.setPosition(10.f, 40.f);
+		window.draw(livesText);
 
 		sf::Vector2f viewSize = window.getView().getSize();
 		inputHintText.setPosition(viewSize.x - 10.f, 10.f);
@@ -157,6 +168,7 @@ namespace ArkanoidGame
 			blocks.clear();
 			++currentLevel;
 			createBlocks();
+			SaveState();
 		}
 	}
 
@@ -166,6 +178,7 @@ namespace ArkanoidGame
 		{
 		
 			--breackableBlocksCount;
+			score += block->GetPoints();
 			Game& game = Application::Instance().GetGame();
 			if (breackableBlocksCount == 0)
 			{
@@ -176,9 +189,48 @@ namespace ArkanoidGame
 		{
 			if (ball->GetPosition().y > gameObjects.front()->GetRect().top)
 			{
-				gameOverSound.play();
-				Application::Instance().GetGame().LooseGame(SETTINGS.PLAYER_NAME, score);
+				if (lives > 1)
+				{
+					--lives;
+					//SaveState();
+					LoadLastState();
+					auto platform = std::dynamic_pointer_cast<Platform>(gameObjects[0]);
+					auto ball = std::dynamic_pointer_cast<Ball>(gameObjects[1]);
+					platform->restart();
+					ball->restart();
+				}
+				else
+				{
+					gameOverSound.play();
+					Application::Instance().GetGame().LooseGame(SETTINGS.PLAYER_NAME, score);
+				}
 			}
+		}
+	}
+
+	std::unique_ptr<Memento> GameStatePlayingData::CreateMemento() const
+	{
+		return std::make_unique<Memento>(score, currentLevel, breackableBlocksCount, blocks);
+	}
+
+	void GameStatePlayingData::SetMemento(const Memento& memento)
+	{
+		score = memento.GetScore();
+		currentLevel = memento.GetCurrentLevel();
+		breackableBlocksCount = memento.GetBreackableBlocksCount();
+		blocks = memento.GetBlocks();
+	}
+
+	void GameStatePlayingData::SaveState()
+	{
+		lastMemento = CreateMemento();
+	}
+
+	void GameStatePlayingData::LoadLastState()
+	{
+		if (lastMemento)
+		{
+			SetMemento(*lastMemento);
 		}
 	}
 

@@ -8,6 +8,7 @@
 #include "BlockFactory.h"
 #include <unordered_map>
 #include "IObserver.h"
+#include "Memento.h"
 
 namespace ArkanoidGame
 {
@@ -26,6 +27,11 @@ namespace ArkanoidGame
 		void LoadNextLevel();
 		void Notify(std::shared_ptr<IObservable> observable) override;
 
+		std::unique_ptr<Memento> CreateMemento() const;
+		void SetMemento(const Memento& memento);
+		void SaveState();
+		void LoadLastState();
+
 	private:
 		void createBlocks();
 		void GetBallInverse(const sf::Vector2f ballPos, const sf::FloatRect& blockRect,
@@ -40,10 +46,15 @@ namespace ArkanoidGame
 		std::vector<std::shared_ptr<GameObject>> gameObjects;
 		std::vector<std::shared_ptr<Block>> blocks;
 		int score = 0;
+		int lives = 3;
+
+		// Memento
+		std::unique_ptr<Memento> lastMemento;
 
 		// UI data
 		sf::Text scoreText;
 		sf::Text inputHintText;
+		sf::Text livesText;
 		sf::RectangleShape background;
 
 		// Sounds

@@ -14,10 +14,11 @@ namespace ArkanoidGame
 		--hitCount;
 		StageChange();
 
-		if (hitCount == 1)
+		if (hitCount == 0)
 		{
 			hitCount = 1;
 			StartTimer(SETTINGS.BREAK_DELAY);
+			Emit();
 		}
 	}
 

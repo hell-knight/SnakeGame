@@ -76,6 +76,9 @@
     <ClCompile Include="LevelLoader.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="Memento.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameStateMainMenu.h">
@@ -156,6 +159,9 @@
     <ClInclude Include="BlockFactory.h" />
     <ClInclude Include="LevelLoader.h" />
     <ClInclude Include="IObserver.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Memento.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>

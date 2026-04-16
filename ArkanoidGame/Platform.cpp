@@ -69,6 +69,11 @@ namespace ArkanoidGame
 		return false;
 	}
 
+	/*void Platform::restart()
+	{
+		sprite.setPosition({ SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT - SETTINGS.PLATFORM_HEIGHT / 2.f });
+	}*/
+
 	void Platform::Move(float speed)
 	{
 		auto position = sprite.getPosition();
