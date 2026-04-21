@@ -1,5 +1,8 @@
 #include "ThreeHitBlock.h"
 #include "GameSettings.h"
+#include <iostream>
+#include "BonusManager.h"
+#include "FragileBlocksBonus.h"
 
 namespace ArkanoidGame
 {
@@ -11,13 +14,23 @@ namespace ArkanoidGame
 
 	void ThreeHitBlock::OnHit()
 	{
-		--hitCount;
+		int damage = BLOCK_DAMAGE_CONTEXT.GetDamage(hitCount, hitCount);
+		TakeDamage(damage);
 		StageChange();
+	}
 
-		if (hitCount == 0)
+	void ThreeHitBlock::TakeDamage(int damage)
+	{
+		std::cout << "ThreeHitBlock::TakeDamage(" << damage << ") HP before: " << hitCount << std::endl;
+
+		hitCount -= damage;
+		std::cout << "HP after: " << hitCount << std::endl;
+		if (hitCount <= 0)
 		{
 			hitCount = 1;
+			std::cout << "*** ThreeHitBlock:: BLOCK DESTROYED! Starting timer and spawning bonus ***" << std::endl;
 			StartTimer(SETTINGS.BREAK_DELAY);
+			BONUS_MANAGER.TrySpawnBonus(GetPosition());
 			Emit();
 		}
 	}

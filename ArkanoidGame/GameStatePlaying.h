@@ -32,10 +32,20 @@ namespace ArkanoidGame
 		void SaveState();
 		void LoadLastState();
 
+		int GetScore() const { return score; }
+		int GetLives() const { return lives; }
+		int GetCurrentLevel() const { return currentLevel; }
+
 	private:
 		void createBlocks();
 		void GetBallInverse(const sf::Vector2f ballPos, const sf::FloatRect& blockRect,
 			bool& needInverseDirX, bool& needInverseDirY);
+		void UpdateBonusStates();
+		void HandleBallPlatformCollision();
+		void HandleBallBlocksCollision(bool& needInverseDirX, bool& needInverseDirY);
+		void CheckBonusCollection();
+		void DrawUI(sf::RenderWindow& window);
+		void DrawBonusIndicators(sf::RenderWindow& window);
 
 		// Resources
 		sf::Font font;
@@ -55,6 +65,8 @@ namespace ArkanoidGame
 		sf::Text scoreText;
 		sf::Text inputHintText;
 		sf::Text livesText;
+		sf::Text levelText;
+		sf::Text bonusStatusText;
 		sf::RectangleShape background;
 
 		// Sounds
@@ -68,5 +80,10 @@ namespace ArkanoidGame
 		// Levels
 		LevelLoader levelLoader;
 		int currentLevel = 0;
+
+		// Bonus state tracking
+		bool wasFragileBlocksActive = false;
+		bool wasPlatformBonusActive = false;
+		float bonusEffectTimer = 0.0f;
 	};
 }

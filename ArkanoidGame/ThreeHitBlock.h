@@ -14,5 +14,6 @@ namespace ArkanoidGame
 	private:
 		void OnHit() override;
 		void StageChange();
+		void TakeDamage(int damage);
 	};
 }

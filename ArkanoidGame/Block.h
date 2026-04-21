@@ -21,6 +21,8 @@ namespace ArkanoidGame
 		virtual bool AffectsBallDirection() const { return true; }
 
 		virtual int GetPoints() const = 0;
+
+		virtual void TakeDamage(int damage = 1);
 	};
 
 	class SmoothDestroyableBlock : public Block, public IDelayedAction
@@ -38,6 +40,8 @@ namespace ArkanoidGame
 		void EachTickAction(float deltaTime) override;
 
 		int GetPoints() const override { return 20; }
+
+		void TakeDamage(int damage = 1) override;
 	};
 
 	class UnbreackableBlock : public Block
@@ -51,5 +55,7 @@ namespace ArkanoidGame
 			++i;
 		}
 		int GetPoints() const override { return 0; }
+
+		void TakeDamage(int damage = 1) override;
 	};
 }

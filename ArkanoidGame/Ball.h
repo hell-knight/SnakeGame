@@ -21,6 +21,21 @@ namespace ArkanoidGame
 		void ChangeAngle(float angle);
 		void restart() override;
 
+		// Geter for decorator
+		const sf::Vector2f& GetDirection() const { return direction; }
+		float GetLastAngle() const { return lastAngle; }
+
+		// State restoration setters
+		void SetDirection(const sf::Vector2f& dir) { direction = dir; }
+		void SetLastAngle(float angle) { lastAngle = angle; }
+		void SetPosition(const sf::Vector2f& pos) { sprite.setPosition(pos); }
+
+
+	/*protected:
+		sf::Vector2f direction;
+		float lastAngle = 90;*/
+
+
 	private:
 		void OnHit();
 		sf::Vector2f direction;

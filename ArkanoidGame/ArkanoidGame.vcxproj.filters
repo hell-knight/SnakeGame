@@ -79,6 +79,18 @@
     <ClCompile Include="Memento.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="BonusManager.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Bonus.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="FragileBlocksBonus.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformBonusItem.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameStateMainMenu.h">
@@ -164,5 +176,9 @@
     <ClInclude Include="Memento.h">
       <Filter>Sources</Filter>
     </ClInclude>
+    <ClInclude Include="BonusManager.h" />
+    <ClInclude Include="Bonus.h" />
+    <ClInclude Include="FragileBlocksBonus.h" />
+    <ClInclude Include="PlatformBonusItem.h" />
   </ItemGroup>
 </Project>

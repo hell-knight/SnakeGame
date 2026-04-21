@@ -7,6 +7,8 @@
 #include "GameStatePauseMenu.h"
 #include "GameStateMainMenu.h"
 #include "GameStateRecords.h"
+#include "BonusManager.h"
+#include "FragileBlocksBonus.h"
 
 namespace ArkanoidGame
 {
@@ -35,6 +37,8 @@ namespace ArkanoidGame
 
 	void Game::StartGame()
 	{
+		BONUS_MANAGER.ClearAllBonuses();
+		BLOCK_DAMAGE_CONTEXT.ResetToNormalState();
 		SwitchStateTo(GameStateType::Playing);
 	}
 
@@ -45,12 +49,16 @@ namespace ArkanoidGame
 
 	void Game::WinGame(const std::string name, const int score)
 	{
+		BONUS_MANAGER.ClearAllBonuses();
+		BLOCK_DAMAGE_CONTEXT.ResetToNormalState();
 		UpdateRecord(name, score);
 		PushState(GameStateType::GameWin, false);
 	}
 
 	void Game::LooseGame(const std::string name, const int score)
 	{
+		BONUS_MANAGER.ClearAllBonuses();
+		BLOCK_DAMAGE_CONTEXT.ResetToNormalState();
 		UpdateRecord(name, score);
 		PushState(GameStateType::GameOver, false);
 	}
@@ -77,11 +85,15 @@ namespace ArkanoidGame
 
 	void Game::ExitGame()
 	{
+		BONUS_MANAGER.ClearAllBonuses();
+		BLOCK_DAMAGE_CONTEXT.ResetToNormalState();
 		SwitchStateTo(GameStateType::MainMenu);
 	}
 
 	void Game::QuitGame()
 	{
+		BONUS_MANAGER.ClearAllBonuses();
+		BLOCK_DAMAGE_CONTEXT.ResetToNormalState();
 		SwitchStateTo(GameStateType::None);
 	}
 
@@ -185,6 +197,9 @@ namespace ArkanoidGame
 		gameStateChangeType = GameStateChangeType::None;
 		pendingGameStateType = GameStateType::None;
 		pendingGameStateIsExclusivelyVisible = false;
+
+		BONUS_MANAGER.ClearAllBonuses();
+		BLOCK_DAMAGE_CONTEXT.ResetToNormalState();
 	}
 
 	void Game::PushState(GameStateType stateType, bool isExclusivelyVisible)
