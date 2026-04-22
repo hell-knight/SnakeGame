@@ -2,6 +2,7 @@
 #include "Bonus.h"
 #include "FragileBlocksBonus.h"
 #include "PlatformBonusItem.h"
+#include "FireBallBonusItem.h"
 #include "randomizer.h"
 #include <algorithm>
 #include <iostream>
@@ -16,6 +17,13 @@ namespace ArkanoidGame
 
 	void BonusManager::Update(float deltaTime)
 	{
+		// Remove destroyed bonus objects
+		bonusObjects.erase(
+			std::remove_if(bonusObjects.begin(), bonusObjects.end(),
+				[](const auto& bonus) {return !bonus || bonus->IsDestroyed(); }),
+			bonusObjects.end()
+		);
+
 		// Update active bonuses timers
 		for (auto& bonus : activeBonuses)
 		{
@@ -32,13 +40,6 @@ namespace ArkanoidGame
 				bonus->Update(deltaTime);
 			}
 		}
-
-		// Remove destroyed bonus objects
-		bonusObjects.erase(
-			std::remove_if(bonusObjects.begin(), bonusObjects.end(),
-				[](const auto& bonus) {return !bonus || bonus->IsDestroyed(); }),
-			bonusObjects.end()
-		);
 	}
 
 	void BonusManager::ActivateBonus(BonusType type, float duration)
@@ -63,6 +64,12 @@ namespace ArkanoidGame
 	{
 		return std::any_of(activeBonuses.begin(), activeBonuses.end(),
 			[](const ActiveBonus& bonus) {return bonus.type == BonusType::FragileBlocks; });
+	}
+
+	bool BonusManager::IsFireballActive() const
+	{
+		return std::any_of(activeBonuses.begin(), activeBonuses.end(),
+			[](const ActiveBonus& bonus) { return bonus.type == BonusType::FireBall; });
 	}
 
 	bool BonusManager::IsPlatformBonusActive() const
@@ -90,31 +97,31 @@ namespace ArkanoidGame
 	void BonusManager::TrySpawnBonus(const sf::Vector2f& position)
 	{
 		// 10% chance to spawn bonus
-		if (random<float>(0.0f, 100.0f) > 50.0f)
+		if (random<float>(0.0f, 100.0f) > 10.0f)
 		{
 			return;
 		}
 		
 		// Random bonus type
-		int bonusType = random<int>(0, 1);
+		int bonusType = random<int>(0, 2);
 		std::shared_ptr<Bonus> bonus;
-		//int bonusType = 0;
+
 		switch (bonusType)
 		{
 		case 0:
 			bonus = std::make_shared<FragileBlocksBonus>(position);
-			//std::cout << "Spawned FragileBlocksBonus at (" << position.x << ", " << position.y << ")" << std::endl;
 			break;
 		case 1:
 			bonus = std::make_shared<PlatformBonusItem>(position);
-			//std::cout << "Spawned PlatformBonusItem at (" << position.x << ", " << position.y << ")" << std::endl;
+			break;
+		case 2:
+			bonus = std::make_shared<FireballBonusItem>(position);
 			break;
 		}
 
 		if (bonus)
 		{
 			bonusObjects.push_back(bonus);
-			std::cout << "Total bonuses: " << bonusObjects.size() << std::endl;
 		}
 	}
 

@@ -84,6 +84,7 @@ namespace ArkanoidGame
 		// Bonus state tracking
 		bool wasFragileBlocksActive = false;
 		bool wasPlatformBonusActive = false;
+		bool wasFireballActive = false;
 		float bonusEffectTimer = 0.0f;
 	};
 }

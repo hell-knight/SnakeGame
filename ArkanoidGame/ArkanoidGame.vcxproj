@@ -26,6 +26,8 @@
     <ClCompile Include="Bonus.cpp" />
     <ClCompile Include="BonusManager.cpp" />
     <ClCompile Include="DurableBlock.cpp" />
+    <ClCompile Include="FireBallBehavior.cpp" />
+    <ClCompile Include="FireballBonusItem.cpp" />
     <ClCompile Include="FragileBlocksBonus.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameMain.cpp" />
@@ -57,6 +59,8 @@
     <ClInclude Include="BonusManager.h" />
     <ClInclude Include="Collidable.h" />
     <ClInclude Include="DurableBlock.h" />
+    <ClInclude Include="FireBallBehavior.h" />
+    <ClInclude Include="FireballBonusItem.h" />
     <ClInclude Include="FragileBlocksBonus.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />

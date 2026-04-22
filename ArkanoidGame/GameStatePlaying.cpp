@@ -12,6 +12,8 @@
 #include "Bonus.h"
 #include "FragileBlocksBonus.h"
 #include "PlatformBonusItem.h"
+#include "FireballBonusItem.h"
+#include "FireBallBehavior.h"
 #include <iostream>
 
 namespace ArkanoidGame
@@ -76,17 +78,15 @@ namespace ArkanoidGame
 		// Clear bonuses and reset states
 		BONUS_MANAGER.ClearAllBonuses();
 		BLOCK_DAMAGE_CONTEXT.ResetToNormalState();
-		//std::cout << "BonusManager initialized and cleared" << std::endl;
 
 		// Reset bonus tracking
 		wasFragileBlocksActive = false;
 		wasPlatformBonusActive = false;
+		wasFireballActive = false;
 
-		//test
-		/*sf::Vector2f testPos(SETTINGS.SCREEN_WIDTH / 2.f, SETTINGS.SCREEN_HEIGHT / 2.f);
-		auto testBonus = std::make_shared<FragileBlocksBonus>(testPos);
-		BONUS_MANAGER.AddBonus(testBonus);
-		std::cout << "Test bonus added at (" << testPos.x << ", " << testPos.y << ")" << std::endl;*/
+		// the ball starts with the default behavior
+		if (auto b = std::dynamic_pointer_cast<Ball>(gameObjects[1]))
+			b->SetBehavior(std::make_shared<DefaultBallBehavior>());
 	}
 
 	void GameStatePlayingData::HandleWindowEvent(const sf::Event& event)
@@ -104,7 +104,6 @@ namespace ArkanoidGame
 	{
 		// Update Bonus states
 		UpdateBonusStates();
-		//std::cout << "Active bonuses count: " << BONUS_MANAGER.GetActiveBonuses().size() << std::endl;
 
 		// Update game objects
 		static auto updateFunctor = [timeDelta](auto obj) {obj->Update(timeDelta); };
@@ -118,7 +117,6 @@ namespace ArkanoidGame
 			if (bonus)
 			{
 				bonus->Update(timeDelta);
-				//std::cout << "Bonus position: (" << bonus->GetPosition().x << ", " << bonus->GetPosition().y << ")" << std::endl;
 			}
 		}
 
@@ -132,9 +130,19 @@ namespace ArkanoidGame
 		if (ball)
 		{
 			platform->CheckCollision(ball);
-		}
 
-		//auto isCollision = platform->CheckCollision(ball);
+			bool fireballActive = BONUS_MANAGER.IsFireballActive();
+			if (fireballActive && !wasFireballActive)
+			{
+				ball->SetBehavior(std::make_shared<FireballBehavior>());
+			}
+			else if (!fireballActive && wasFireballActive)
+			{
+				std::cout << "Switching to DefaultBallBehavior" << std::endl;
+				ball->SetBehavior(std::make_shared<DefaultBallBehavior>());
+			}
+			wasFireballActive = fireballActive;
+		}
 
 		bool needInverseDirX = false;
 		bool needInverseDirY = false;
@@ -143,7 +151,6 @@ namespace ArkanoidGame
 		scoreText.setString("Score: " + std::to_string(score));
 		livesText.setString("Lives: " + std::to_string(lives));
 		levelText.setString("Level: " + std::to_string(currentLevel + 1));
-		//SaveState();
 	}
 
 	void GameStatePlayingData::Draw(sf::RenderWindow& window)
@@ -156,25 +163,12 @@ namespace ArkanoidGame
 		std::for_each(gameObjects.begin(), gameObjects.end(), drawFunc);
 		std::for_each(blocks.begin(), blocks.end(), drawFunc);
 
-		/*scoreText.setOrigin(GetTextOrigin(scoreText, { 0.f, 0.f }));
-		scoreText.setPosition(10.f, 10.f);
-		window.draw(scoreText);
-
-		livesText.setOrigin(GetTextOrigin(livesText, { 0.f, 0.f }));
-		livesText.setPosition(10.f, 40.f);
-		window.draw(livesText);
-
-		sf::Vector2f viewSize = window.getView().getSize();
-		inputHintText.setPosition(viewSize.x - 10.f, 10.f);
-		window.draw(inputHintText);*/
-
 		// Draw bonuses
 		for (auto& bonus : BONUS_MANAGER.GetActiveBonuses())
 		{
 			if (bonus && !bonus->IsDestroyed())
 			{
 				bonus->Draw(window);
-				//std::cout << "Drawing bonus" << std::endl;
 			}
 		}
 
@@ -198,6 +192,9 @@ namespace ArkanoidGame
 			platform->restart();
 			ball->restart();
 
+			// Reset ball behavior at the start of a new level
+			ball->SetBehavior(std::make_shared<DefaultBallBehavior>());
+
 			blocks.clear();
 			++currentLevel;
 			createBlocks();
@@ -206,6 +203,7 @@ namespace ArkanoidGame
 			// Reset bonus states for new level
 			wasFragileBlocksActive = false;
 			wasPlatformBonusActive = false;
+			wasFireballActive = false;
 		}
 	}
 
@@ -229,13 +227,15 @@ namespace ArkanoidGame
 				if (lives > 1)
 				{
 					--lives;
-					//std::cout << "Lives after: " << lives << std::endl;
-					//SaveState();
 					LoadLastState();
 					auto platform = std::dynamic_pointer_cast<Platform>(gameObjects[0]);
 					auto currentBall = std::dynamic_pointer_cast<Ball>(gameObjects[1]);
 					platform->restart();
 					currentBall->restart();
+
+					// Resetting behavior after losing a life
+					currentBall->SetBehavior(std::make_shared<DefaultBallBehavior>());
+					wasFireballActive = false;
 				}
 				else
 				{
@@ -316,24 +316,6 @@ namespace ArkanoidGame
 		{
 			needInverseDirX = true;
 		}
-
-		// Calculate overlap
-		//float overlapLeft = ballPos.x - blockRect.left;
-		//float overlapRight = blockRect.left + blockRect.width - ballPos.x;
-		//float overlapTop = ballPos.y - blockRect.top;
-		//float overlapBottom = blockRect.top + blockRect.height - ballPos.y;
-
-		//// Find minimum overlap
-		//float minOverlap = std::min({ overlapLeft, overlapRight, overlapTop, overlapBottom });
-
-		//if (minOverlap == overlapLeft || minOverlap == overlapRight)
-		//{
-		//	needInverseDirX = true;
-		//}
-		//else
-		//{
-		//	needInverseDirY = true;
-		//}
 	}
 
 	void GameStatePlayingData::UpdateBonusStates()
@@ -351,8 +333,10 @@ namespace ArkanoidGame
 		std::shared_ptr<Ball> ball = std::dynamic_pointer_cast<Ball>(gameObjects[1]);
 		if (!ball) return;
 
-		bool hasBrokeOneBlock = false;
+		bool directionChanged = false;
 		std::vector<std::shared_ptr<Block>> blocksToRemove;
+
+		bool isFireBall = ball->GetBehavior() && ball->GetBehavior()->IsFireball();
 
 		for (auto& block : blocks)
 		{
@@ -363,12 +347,17 @@ namespace ArkanoidGame
 			if (collided)
 			{
 				SaveState();
-				if ((!hasBrokeOneBlock) && block->AffectsBallDirection())
+				if (isFireBall)
 				{
-					hasBrokeOneBlock = true;
+					ball->GetBehavior()->HandleBlockCollision(ball.get(), block);
+				}
+				else if (!directionChanged && block->AffectsBallDirection())
+				{
 					const auto ballPos = ball->GetPosition();
 					const auto blockRect = block->GetRect();
 					GetBallInverse(ballPos, blockRect, needInverseDirX, needInverseDirY);
+
+					directionChanged = true;
 				}
 			}
 
@@ -389,9 +378,11 @@ namespace ArkanoidGame
 		}
 
 		// Apply direction changes
-		
-		if (needInverseDirX) ball->InvertDirectionX();
-		if (needInverseDirY) ball->InvertDirectionY();
+		if (!isFireBall)
+		{
+			if (needInverseDirX) ball->InvertDirectionX();
+			if (needInverseDirY) ball->InvertDirectionY();
+		}
 	}
 
 	void GameStatePlayingData::CheckBonusCollection()
@@ -400,34 +391,29 @@ namespace ArkanoidGame
 
 		if (!platform)
 		{
-			//std::cout << "ERROR: Platform is null!" << std::endl;
 			return;
 		}
 
-		//std::cout << "Checking " << BONUS_MANAGER.GetActiveBonuses().size() << " bonuses" << std::endl;
+		std::vector<std::shared_ptr<Bonus>> collectedBonuses;
 
 		for (auto& bonus : BONUS_MANAGER.GetActiveBonuses())
 		{
-			if (!bonus)
+			if (!bonus || bonus->IsDestroyed())
 			{
-				//std::cout << "ERROR: Bonus is null!" << std::endl;
 				continue;
 			}
+			if (platform->GetCollision(bonus))
+			{
+				std::cout << "Bonus collected!" << std::endl;
+				bonus->Activate();
+				bonus->MarkAsDestroyed();
+				collectedBonuses.push_back(bonus);
+			}
+		}
 
-			if (bonus->IsDestroyed())
-			{
-				//std::cout << "Bonus already destroyed" << std::endl;
-				continue;
-			}
-			if (bonus && !bonus->IsDestroyed())
-			{
-				if (platform->GetCollision(bonus))
-				{
-					//std::cout << "Bonus collected!" << std::endl;
-					bonus->Activate();
-					bonus->MarkAsDestroyed();
-				}
-			}
+		for (auto& bonus : collectedBonuses)
+		{
+			BONUS_MANAGER.RemoveBonus(bonus);
 		}
 	}
 
@@ -477,6 +463,15 @@ namespace ArkanoidGame
 			bonusStatusText.setFillColor(sf::Color::Green);
 			bonusStatusText.setPosition(10.f, yOffset);
 			window.draw(bonusStatusText);
+		}
+
+		if (BONUS_MANAGER.IsFireballActive())
+		{
+			bonusStatusText.setString("FIREBALL ACTIVE");
+			bonusStatusText.setFillColor(sf::Color::Red);
+			bonusStatusText.setPosition(10.f, yOffset);
+			window.draw(bonusStatusText);
+			yOffset += 25.f;
 		}
 	}
 

@@ -15,31 +15,20 @@ namespace ArkanoidGame
 {
 	Ball::Ball(const sf::Vector2f& position)
 		: GameObject(SETTINGS.TEXTURES_PATH + TEXTURE_ID + ".png", position, (float)SETTINGS.BALL_SIZE, (float)SETTINGS.BALL_SIZE)
+		, behavior(std::make_shared<DefaultBallBehavior>())
 	{
 		const float angle = 90.f;
 		const auto pi = std::acos(-1.f);
 		direction.x = std::cos(pi / 180.f * angle);
 		direction.y = std::sin(pi / 180.f * angle);
+		behavior->OnActivate(this);
 	}
 
 	void Ball::Update(float timeDelta)
 	{
-		const auto pos = sprite.getPosition() + SETTINGS.BALL_SPEED * timeDelta * direction;
-		sprite.setPosition(pos);
-
-		if (pos.x - SETTINGS.BALL_SIZE / 2.f <= 0 || pos.x + SETTINGS.BALL_SIZE / 2.f >= SETTINGS.SCREEN_WIDTH)
+		if (behavior)
 		{
-			direction.x *= -1;
-		}
-
-		if(pos.y - SETTINGS.BALL_SIZE / 2.f <= 0 || pos.y + SETTINGS.BALL_SIZE / 2.f >= SETTINGS.SCREEN_HEIGHT)
-		{
-			direction.y *= -1;
-		}
-		//
-		if (pos.y + SETTINGS.BALL_SIZE / 2.f >= SETTINGS.SCREEN_HEIGHT)
-		{
-			Emit();
+			behavior->Update(this, timeDelta);
 		}
 	}
 
@@ -75,12 +64,25 @@ namespace ArkanoidGame
 		const auto pi = std::acos(-1.f);
 		direction.x = std::cos(pi / 180.f * angle);
 		direction.y = std::sin(pi / 180.f * angle);
+
+		SetBehavior(std::make_shared<DefaultBallBehavior>());
 	}
 
 	void Ball::OnHit()
 	{
 		lastAngle += random<float>(-5, 5);
 		ChangeAngle(lastAngle);
+	}
+
+	void Ball::SetBehavior(std::shared_ptr<IBallBehavior> newBehavior)
+	{
+		if (newBehavior == nullptr) return;
+
+		if (behavior != nullptr)
+			behavior->OnDeactivate(this);
+
+		behavior = newBehavior;
+		behavior->OnActivate(this);
 	}
 
 }

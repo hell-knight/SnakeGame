@@ -42,15 +42,6 @@ namespace ArkanoidGame
 
 	void Bonus::OnHit()
 	{
-		//Check if collided with platform
-		//auto platform = std::dynamic_pointer_cast<Platform>(shared_from_this());
-		//if (platform)
-		//{
-			//Activate();
-			//destroyed = true;
-		//}
-		//Activate();
-		//destroyed = true;
 	}
 
 }

@@ -117,8 +117,6 @@ namespace ArkanoidGame
         : Bonus(position)
     {
         SetSpriteSize(sprite, 30.f, 30.f);
-        //auto textureSize = texture.getSize();
-        //std::cout << "Rock.png texture size: " << textureSize.x << "x" << textureSize.y << std::endl;
         SetSpriteRelativeOrigin(sprite, 0.5f, 0.5f);
         sprite.setColor(sf::Color::Yellow);
     }

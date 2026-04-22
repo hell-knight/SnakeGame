@@ -12,7 +12,7 @@ public:
 	{
 		observers.push_back(observer);
 	}
-protected:
+
 	virtual void Emit() {
 		auto self = shared_from_this();
 		std::for_each(observers.begin(), observers.end(), [self](auto observer) {

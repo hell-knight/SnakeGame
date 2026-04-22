@@ -14,7 +14,8 @@ namespace ArkanoidGame
 	{
 		None,
 		FragileBlocks,
-		PlatformBonus
+		PlatformBonus,
+		FireBall
 	};
 
 	struct ActiveBonus
@@ -35,12 +36,8 @@ namespace ArkanoidGame
 
 		// Query active bonuses
 		bool IsFragileBlocksActive() const;
+		bool IsFireballActive() const;
 		bool IsPlatformBonusActive() const;
-
-		// Get remaining time for bonuses
-		/*float GetFireballRemainingTime() const;
-		float GetFragileBlocksRemainingTime() const;
-		float GetPlatformBonusRemainingTime() const;*/
 
 		// Platform bonus modifiers
 		float GetPlatformWidthMultiplier() const;

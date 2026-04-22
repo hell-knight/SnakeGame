@@ -91,6 +91,12 @@
     <ClCompile Include="PlatformBonusItem.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="FireBallBehavior.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="FireballBonusItem.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameStateMainMenu.h">
@@ -180,5 +186,7 @@
     <ClInclude Include="Bonus.h" />
     <ClInclude Include="FragileBlocksBonus.h" />
     <ClInclude Include="PlatformBonusItem.h" />
+    <ClInclude Include="FireBallBehavior.h" />
+    <ClInclude Include="FireballBonusItem.h" />
   </ItemGroup>
 </Project>

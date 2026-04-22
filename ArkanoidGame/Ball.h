@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "GameObject.h"
 #include "Collidable.h"
+#include "FireBallBehavior.h"
 #include "IObserver.h"
 
 namespace ArkanoidGame
@@ -29,16 +30,17 @@ namespace ArkanoidGame
 		void SetDirection(const sf::Vector2f& dir) { direction = dir; }
 		void SetLastAngle(float angle) { lastAngle = angle; }
 		void SetPosition(const sf::Vector2f& pos) { sprite.setPosition(pos); }
+		void SetColor(const sf::Color& color) { sprite.setColor(color); }
 
-
-	/*protected:
-		sf::Vector2f direction;
-		float lastAngle = 90;*/
+		void SetBehavior(std::shared_ptr<IBallBehavior> newBehavior);
+		std::shared_ptr<IBallBehavior> GetBehavior() const { return behavior; }
 
 
 	private:
 		void OnHit();
 		sf::Vector2f direction;
 		float lastAngle = 90;
+
+		std::shared_ptr<IBallBehavior> behavior;
 	};
 }

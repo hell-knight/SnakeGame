@@ -34,10 +34,4 @@ namespace ArkanoidGame
 		return std::make_shared<UnbreackableBlock>(position);
 	}
 
-	/*std::shared_ptr<Block> GlassBlockFactory::CreateBlock(const sf::Vector2f& position)
-	{
-		++createdBreackableBlocksCount;
-		return std::make_shared<GlassBlock>(position);
-	}*/
-
 }
